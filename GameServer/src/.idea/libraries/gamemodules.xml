@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="gamemodules">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/gamemodules/GuessGame.jar!/" />
+      <root url="jar://$PROJECT_DIR$/gamemodules/UltraGuessGame.jar!/" />
+      <root url="jar://$PROJECT_DIR$/gamemodules/GuessGameDeluxe.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
