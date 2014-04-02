@@ -2,6 +2,7 @@ package network.telnet;
 
 import org.apache.commons.net.telnet.TelnetClient;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
@@ -28,6 +29,15 @@ public class TelnetWriter implements Runnable {
         OutputStream output = client.getOutputStream();
 
         while(true) {
+            if(handler.isReady()) {
+                try {
+                    output.write("help\r\n".getBytes());
+                    output.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
             if(handler.isReady() && !toSend.isEmpty()) {
                 try {
                     String message = toSend.remove(0) + "\r\n";

@@ -15,7 +15,7 @@ public class Application {
     }
 
     public Application() {
-        String host = "localhost";
+        String host = "145.37.55.24";
         int port = 7789;
 
         String username = UUID.randomUUID().toString();
@@ -24,11 +24,7 @@ public class Application {
             interpreter = new Interpreter(Interpreter.Protocol.TELNET, host, port);
             interpreter.login(username);
             interpreter.getPlayerList();
-            interpreter.getPlayerList();
-            interpreter.getPlayerList();
-            interpreter.getPlayerList();
-            interpreter.getPlayerList();
-            interpreter.getPlayerList();
+
             interpreter.connect();
         }
         catch(Exception e) {
