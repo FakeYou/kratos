@@ -1,5 +1,6 @@
 package org.kratos.framework.communication;
 
+import com.sun.scenario.Settings;
 import org.kratos.framework.Kratos;
 import org.kratos.framework.communication.command.GetCommand;
 import org.kratos.framework.communication.command.LoginCommand;
@@ -31,9 +32,6 @@ public class Communication {
         connected = false;
         loop = true;
 
-        host = "127.0.0.1";
-        port = 7789;
-
         handler = new TelnetHandler();
 
         commands = new HashMap<String, CommunicationCommand>();
@@ -59,7 +57,10 @@ public class Communication {
         handler.addListener(challengeListener);
     }
 
-    public void connect() {
+    public void connect(String host, int port) {
+        this.host = host;
+        this.port = port;
+
         handler.connect(host, port);
         connected = true;
     }

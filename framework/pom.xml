@@ -42,7 +42,7 @@
     <build>
         <resources>
             <resource>
-                <directory>src/main/resources</directory>
+                <directory>framework/src/main/resources</directory>
             </resource>
         </resources>
     </build>

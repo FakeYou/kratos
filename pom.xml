@@ -27,6 +27,12 @@
                 </configuration>
             </plugin>
         </plugins>
+
+        <resources>
+            <resource>
+                <directory>framework/src/main/resources</directory>
+            </resource>
+        </resources>
     </build>
 
 </project>

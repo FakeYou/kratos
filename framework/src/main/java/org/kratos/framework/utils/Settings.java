@@ -3,11 +3,10 @@ package org.kratos.framework.utils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
@@ -21,23 +20,18 @@ public class Settings {
     }
 
     public void loadSettingsFile(String path) {
-        loadSettingsFile(path, StandardCharsets.UTF_8);
-    }
-
-    public void loadSettingsFile(String path, Charset encoding) {
         try {
-            InputStream inputStream = getClass().getResourceAsStream(path);
-
-            System.out.println(inputStream);
-
-            StringWriter writer = new StringWriter();
-            IOUtils.copy(inputStream, writer, encoding.toString());
-            String fileContent = writer.toString();
+            File file = new File(path);
+            String fileContent = FileUtils.readFileToString(file);
 
             JsonParser parser = new JsonParser();
 
             root = parser.parse(fileContent).getAsJsonObject();
-        } catch (IOException e) {
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
     }
