@@ -60,7 +60,6 @@ public class Lobby {
     }
 
     public void reloadPlayerlist() {
-
         playerlistPanel.removeAll();
         playerlistPanel.validate();
         interpreter.getPlayerlist(playerlistListener());

@@ -62,4 +62,12 @@ public class App {
         loginFrame.toFront();
         loginFrame.requestFocus();
     }
+
+    public JFrame getLoginFrame() {
+        return loginFrame;
+    }
+
+    public JFrame getLobbyFrame() {
+        return lobbyFrame;
+    }
 }
