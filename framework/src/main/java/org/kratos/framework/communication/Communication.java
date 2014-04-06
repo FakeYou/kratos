@@ -1,6 +1,5 @@
 package org.kratos.framework.communication;
 
-import com.sun.scenario.Settings;
 import org.kratos.framework.Kratos;
 import org.kratos.framework.communication.command.GetCommand;
 import org.kratos.framework.communication.command.LoginCommand;
@@ -10,11 +9,12 @@ import org.kratos.framework.communication.telnet.TelnetHandler;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Stack;
 
 /**
  * Created by FakeYou on 3/29/14.
  */
-public class Communication {
+public class Communication implements Runnable {
 
     private Kratos kratos;
     private CommunicationHandler handler;
@@ -25,6 +25,8 @@ public class Communication {
 
     private HashMap<String, CommunicationCommand> commands;
     private HashMap<String, CommunicationListener> listeners;
+
+    private Stack<CommandExecuter> toExecute;
 
     private boolean loop;
 
@@ -50,6 +52,27 @@ public class Communication {
 
         listeners = new HashMap<String, CommunicationListener>();
         registerListeners();
+
+        toExecute = new Stack<CommandExecuter>();
+    }
+
+    @Override
+    public void run() {
+        while(true) {
+            if(!toExecute.isEmpty() && !handler.isBusy()) {
+
+                CommandExecuter executer = toExecute.remove(0);
+                System.out.println("[Communication/execute] " + executer.getCommand());
+
+                try {
+                    commands.get(executer.getCommand()).addListener(executer.getListener());
+                    commands.get(executer.getCommand()).execute(executer.getArguments());
+                    handler.setBusy(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     public void registerCommands() {
@@ -91,17 +114,11 @@ public class Communication {
 
     public void command(String command, CommandListener listener, String ... arguments) {
         if(connected) {
-            try {
-                commands.get(command).execute(arguments);
-                commands.get(command).addListener(listener);
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
+            toExecute.add(new CommandExecuter(command, listener, arguments));
         }
     }
 
-    public CommunicationListener getCommunicaionListener(String name) {
+    public CommunicationListener getCommunicationListener(String name) {
         if(listeners.containsKey(name)) {
             return listeners.get(name);
         }

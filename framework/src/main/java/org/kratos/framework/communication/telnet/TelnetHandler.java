@@ -13,12 +13,14 @@ import java.util.ArrayList;
  */
 public class TelnetHandler implements CommunicationHandler {
     private boolean ready;
+    private boolean busy;
 
     private TelnetClient client;
     private TelnetReader reader;
     private TelnetWriter writer;
 
     private Thread readerThread;
+    private Thread writerThread;
 
     private ArrayList<CommunicationListener> listeners;
 
@@ -38,6 +40,9 @@ public class TelnetHandler implements CommunicationHandler {
 
         readerThread = new Thread(reader);
         readerThread.start();
+
+        writerThread = new Thread(writer);
+        writerThread.start();
     }
 
     @Override
@@ -66,11 +71,20 @@ public class TelnetHandler implements CommunicationHandler {
         this.ready = ready;
     }
 
+    public Boolean isBusy() {
+        return busy;
+    }
+
+    public void setBusy(Boolean busy) {
+        this.busy = busy;
+    }
+
     public void addListener(CommunicationListener listener) {
         reader.addListener(listener);
     }
 
     public void write(String message) {
+
         try {
             writer.write(message);
         }

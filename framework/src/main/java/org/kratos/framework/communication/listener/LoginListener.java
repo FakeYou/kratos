@@ -23,7 +23,7 @@ public class LoginListener implements CommunicationListener {
     }
 
     @Override
-    public Boolean trigger(String message) {
+    public resolved trigger(String message) {
         String OkPattern = "^(OK)$";
         String ErrPattern = "^(ERR).+";
         String ErrDuplicatePattern = "^(ERR Duplicate name exists)$";
@@ -32,25 +32,25 @@ public class LoginListener implements CommunicationListener {
         if(message.matches(OkPattern)) {
             informListeners(Communication.status.OK, "logged in");
             listening = false;
-            return true;
+            return resolved.COMPLETE;
         }
         else if(message.matches(ErrDuplicatePattern)) {
             informListeners(Communication.status.ERROR_LOGIN_DUPLICATE_NAME, "duplicate name");
             listening = false;
-            return true;
+            return resolved.COMPLETE;
         }
         else if(message.matches(ErrLoggedInPattern)) {
             informListeners(Communication.status.ERROR_LOGIN_ALREADY_LOGGED_IN, "already logged in");
             listening = false;
-            return true;
+            return resolved.COMPLETE;
         }
         else if(message.matches(ErrPattern)) {
             informListeners(Communication.status.ERROR, "unknown error");
             listening = false;
-            return true;
+            return resolved.COMPLETE;
         }
 
-        return false;
+        return resolved.INCOMPLETE;
     }
 
     @Override

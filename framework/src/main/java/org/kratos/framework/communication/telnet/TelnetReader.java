@@ -42,19 +42,30 @@ public class TelnetReader implements Runnable {
 
             if(reader > 0) {
                 String chunk = new String(buffer, 0, reader);
-                chunk = chunk.replace("\n", "").replace("\r", "");
                 response += chunk;
 
-                for(CommunicationListener listener : listeners) {
-                    if(!listener.isListening()) {
-                        continue;
-                    }
+                String[] responses = response.split("\r\n");
 
-                    boolean success = listener.trigger(response);
+                for(int i = 0; i < responses.length; i++) {
+                    String response = responses[i].replace("\r\n", "");
+                    System.out.println("[TelnetReader/read] " + response);
 
-                    if(success) {
-                        response = "";
-                        break;
+                    for(CommunicationListener listener : listeners) {
+                        if(!listener.isListening()) {
+                            continue;
+                        }
+
+                        CommunicationListener.resolved status = listener.trigger(response);
+
+                        if(status == CommunicationListener.resolved.COMPLETE) {
+                            this.response = "";
+                            handler.setBusy(false);
+                            break;
+                        }
+                        else if(status == CommunicationListener.resolved.PARTIAL) {
+                            this.response = "";
+                            break;
+                        }
                     }
                 }
             }

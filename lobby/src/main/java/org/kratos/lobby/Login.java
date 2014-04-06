@@ -23,8 +23,10 @@ public class Login {
     private JLabel portLabel;
 
     private final Kratos kratos;
+    private App app;
 
-    public Login(final Kratos kratos) {
+    public Login(final App app, final Kratos kratos) {
+        this.app = app;
         this.kratos = kratos;
 
         final String host = kratos.getSetting("host").getAsString();
@@ -39,8 +41,8 @@ public class Login {
             @Override
             public void trigger(Communication.status status, String response) {
                 if(status == Communication.status.OK) {
-                    System.out.println("everything went well");
                     setErrorLabel(" ");
+                    app.openLobby();
                 }
                 else if(status == Communication.status.ERROR_LOGIN_DUPLICATE_NAME) {
                     setErrorLabel("Duplicate username");
@@ -58,12 +60,13 @@ public class Login {
             @Override
             public void trigger(Communication.status status, String response) {
                 if(status == Communication.status.OK) {
-                    System.out.println("success");
+                    setErrorLabel(" ");
+
+                    // connection was successful so now we can go login
                     kratos.getInterpreter().login(usernameField.getText(), loginListener);
                 }
                 else if(status == Communication.status.ERROR_CONNECT_REFUSED) {
                     setErrorLabel("Connection refused");
-                    kratos.getInterpreter().disconnect();
                 }
                 else {
                     setErrorLabel("Unknown error");
@@ -75,17 +78,19 @@ public class Login {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            if(kratos.getCommunication().isConnected()) {
-                String username = usernameField.getText();
+                // if we're already connected then directly login
+                if(kratos.getCommunication().isConnected()) {
+                    String username = usernameField.getText();
 
-                kratos.getInterpreter().login(username, loginListener);
-            }
-            else {
-                String host = hostField.getText();
-                int port = Integer.parseInt(portField.getText());
+                    kratos.getInterpreter().login(username, loginListener);
+                }
+                // else connect to the server first
+                else {
+                    String host = hostField.getText();
+                    int port = Integer.parseInt(portField.getText());
 
-                kratos.getInterpreter().connect(host, port, connectListener);
-            }
+                    kratos.getInterpreter().connect(host, port, connectListener);
+                }
             }
         });
     }

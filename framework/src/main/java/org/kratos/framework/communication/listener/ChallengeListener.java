@@ -19,16 +19,15 @@ public class ChallengeListener implements CommunicationListener {
     }
 
     @Override
-    public Boolean trigger(String message) {
+    public resolved trigger(String message) {
         String ChallengePatten = "^(SVR GAME CHALLENGE \\{CHALLENGER: \").+(\", GAMETYPE: \")[a-zA-Z ]+(\", CHALLENGENUMBER: \")[0-9]+(\"\\})$";
 
         if(message.matches(ChallengePatten)) {
-            System.out.println(message);
             informListeners(Communication.status.OK, message);
-            return true;
+            return resolved.COMPLETE;
         }
 
-        return false;
+        return resolved.INCOMPLETE;
     }
 
     @Override
@@ -49,6 +48,8 @@ public class ChallengeListener implements CommunicationListener {
 
     @Override
     public void addListener(CommandListener listener) {
-
+        if(!listeners.contains(listener)) {
+            listeners.add(listener);
+        }
     }
 }

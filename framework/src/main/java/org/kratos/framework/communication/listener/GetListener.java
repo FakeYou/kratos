@@ -23,7 +23,7 @@ public class GetListener implements CommunicationListener {
     }
 
     @Override
-    public Boolean trigger(String message) {
+    public resolved trigger(String message) {
         String OkPattern = "^(OK)$";
         String ErrPattern = "^(ERR).+";
         String ErrUnknownArgumentPattern = "^(ERR Unknown GET argument: \').+(\')$";
@@ -31,30 +31,30 @@ public class GetListener implements CommunicationListener {
         String GamelistPattern = "^(SVR GAMELIST \\[).*(\\])$";
 
         if(message.matches(OkPattern)) {
-            return true;
+            return resolved.PARTIAL;
         }
         else if(message.matches(PlayerlistPattern)) {
             informListeners(Communication.status.OK, message);
             listening = false;
-            return true;
+            return resolved.COMPLETE;
         }
         else if(message.matches(GamelistPattern)) {
             informListeners(Communication.status.OK, message);
             listening = false;
-            return true;
+            return resolved.COMPLETE;
         }
         else if(message.matches(ErrUnknownArgumentPattern)) {
             informListeners(Communication.status.ERROR_GET_UNKNOWN_ARGUMENT, "unknown argument");
             listening = false;
-            return true;
+            return resolved.COMPLETE;
         }
         else if(message.matches(ErrPattern)) {
             informListeners(Communication.status.ERROR, "unknown error");
             listening = false;
-            return true;
+            return resolved.COMPLETE;
         }
 
-        return false;
+        return resolved.INCOMPLETE;
     }
 
     @Override

@@ -12,6 +12,9 @@ public interface CommunicationHandler {
     public Boolean isReady();
     public void setReady(Boolean ready);
 
+    public Boolean isBusy();
+    public void setBusy(Boolean busy);
+
     public void write(String message);
 
     public void addListener(CommunicationListener listener);

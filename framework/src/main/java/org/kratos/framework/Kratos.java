@@ -14,6 +14,8 @@ public class Kratos {
     private Communication communication;
     private Interpreter interpreter;
 
+    private Thread communicationThread;
+
     public Kratos() {
         settings = new Settings();
         settings.loadSettingsFile("./framework/src/main/resources/settings.json");
@@ -21,6 +23,9 @@ public class Kratos {
         communication = new Communication(this);
 
         interpreter = new Interpreter(communication);
+
+        communicationThread = new Thread(communication);
+        communicationThread.start();
     }
 
     public JsonElement getSetting(String... keys) {
