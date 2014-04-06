@@ -3,20 +3,20 @@ package org.kratos.framework.communication.listener;
 import org.kratos.framework.communication.CommandListener;
 import org.kratos.framework.communication.Communication;
 import org.kratos.framework.communication.CommunicationListener;
-import org.kratos.framework.communication.command.ChallengeCommand;
+import org.kratos.framework.communication.command.SubscribeCommand;
 
 import java.util.ArrayList;
 
 /**
  * Created by FakeYou on 4/6/14.
  */
-public class ChallengeListener implements CommunicationListener {
+public class SubscribeListener implements CommunicationListener {
 
-    private ChallengeCommand command;
-    private Boolean listening = true;
+    private SubscribeCommand command;
+    private boolean listening = true;
     private ArrayList<CommandListener> listeners;
 
-    public ChallengeListener(ChallengeCommand command) {
+    public SubscribeListener(SubscribeCommand command) {
         this.command = command;
 
         listeners = new ArrayList<CommandListener>();
@@ -25,27 +25,17 @@ public class ChallengeListener implements CommunicationListener {
     @Override
     public resolved trigger(String message) {
         String OkPattern = "^(OK)$";
-        String ErrUnknownPlayerPattern = "^(ERR Unknown player: \\').+(\\')$";
-        String ErrUnknownGamePattern = "^(ERR Unknown game: \\').+(\\')$";
-        String ErrIllegalArguments = "^(ERR Illegal argument\\(s\\) for command)$";
+        String ErrUnkownGamePattern = "^(ERR Unknown game: \').+(\')$";
+
+        System.out.println("-" + message);
 
         if(message.matches(OkPattern)) {
-            informListeners(Communication.status.OK, "challenge sent");
+            informListeners(Communication.status.OK, "subscribed");
             listening = false;
             return resolved.COMPLETE;
         }
-        else if(message.matches(ErrUnknownPlayerPattern)) {
-            informListeners(Communication.status.ERROR_CHALLENGE_UNKNOWN_PLAYER, message);
-            listening = false;
-            return resolved.COMPLETE;
-        }
-        else if(message.matches(ErrUnknownGamePattern)) {
-            informListeners(Communication.status.ERROR_CHALLENGE_UNKNOWN_GAME, message);
-            listening = false;
-            return resolved.COMPLETE;
-        }
-        else if(message.matches(ErrIllegalArguments)) {
-            informListeners(Communication.status.ERROR_CHALLENGE_ILLEGAL_ARGUMENTS, message);
+        else if(message.matches(ErrUnkownGamePattern)) {
+            informListeners(Communication.status.ERROR_SUBSCRIBE_UNKNOWN_GAME, "unknown game");
             listening = false;
             return resolved.COMPLETE;
         }

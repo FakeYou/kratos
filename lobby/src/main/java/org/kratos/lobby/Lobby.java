@@ -4,9 +4,9 @@ import org.kratos.framework.Kratos;
 import org.kratos.framework.communication.CommandListener;
 import org.kratos.framework.communication.Communication;
 import org.kratos.framework.communication.Interpreter;
+import org.kratos.framework.match.Challenge;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,6 +22,8 @@ public class Lobby {
     private JPanel panel;
     private JPanel playerlistPanel;
     private JPanel controlsPanel;
+    private JButton refreshPlayerListButton;
+    private JLabel statusLabel;
 
     private Kratos kratos;
     private Interpreter interpreter;
@@ -29,6 +31,7 @@ public class Lobby {
 
     private CommandListener gamelistListener;
     private CommandListener playerlistListener;
+    private CommandListener subscribeListener;
 
     public Lobby(final App app, final Kratos kratos) {
         this.app = app;
@@ -38,12 +41,54 @@ public class Lobby {
         BoxLayout box = new BoxLayout(playerlistPanel, BoxLayout.PAGE_AXIS);
         playerlistPanel.setLayout(box);
 
+        kratos.getCommunication().getCommunicationListener("challengeRequest").addListener(new CommandListener() {
+            @Override
+            public void trigger(Communication.status status, String response) {
+                Challenge challenge = interpreter.parseChallengeRequest(response);
+
+                String message = "You have been challenged by " + challenge.getChallenger() + " to play " + challenge.getGame() + ".\n\r" +
+                        "Do you wish to accept the challenge?";
+
+                int answer = JOptionPane.showConfirmDialog(app.getLobbyFrame(), message, "Challenge - kratos", JOptionPane.YES_NO_OPTION);
+
+                if(answer == JOptionPane.YES_OPTION) {
+                    challenge.setAccepted(true);
+                }
+                else {
+                    challenge.setAccepted(false);
+                }
+            }
+        });
+
+        gamelistCombobox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                app.setSelectedGame((String) gamelistCombobox.getSelectedItem());
+            }
+        });
+
+        randomOpponentButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                interpreter.subscribe(app.getSelectedGame(), subscribeListener());
+                statusLabel.setText("Finding opponent");
+                statusLabel.validate();
+            }
+        });
+
         logoutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 interpreter.logout(null);
                 interpreter.disconnect();
                 app.openLogin();
+            }
+        });
+
+        refreshPlayerListButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                reloadPlayerlist();
             }
         });
     }
@@ -71,7 +116,8 @@ public class Lobby {
                 @Override
                 public void trigger(Communication.status status, String response) {
                     String[] gamelist = interpreter.parseGamelist(response);
-                    System.out.println(response);
+
+                    app.setSelectedGame(gamelist[0]);
 
                     for(String game : gamelist) {
                         gamelistCombobox.addItem(game);
@@ -111,6 +157,23 @@ public class Lobby {
         }
 
         return playerlistListener;
+    }
+
+    private CommandListener subscribeListener() {
+        if(subscribeListener == null) {
+            subscribeListener = new CommandListener() {
+                @Override
+                public void trigger(Communication.status status, String response) {
+                    System.out.println(status + " - " + response);
+                    if(status == Communication.status.OK) {
+                        statusLabel.setText("Subscribed to " + app.getSelectedGame());
+                        statusLabel.validate();
+                    }
+                }
+            };
+        }
+
+        return subscribeListener;
     }
 
     public JPanel getPanel() {

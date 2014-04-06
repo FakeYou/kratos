@@ -42,6 +42,7 @@ public class Login {
             public void trigger(Communication.status status, String response) {
                 if(status == Communication.status.OK) {
                     setErrorLabel(" ");
+                    app.setSelectedUsername(usernameField.getText());
                     app.openLobby();
                 }
                 else if(status == Communication.status.ERROR_LOGIN_DUPLICATE_NAME) {

@@ -1,11 +1,8 @@
 package org.kratos.framework.communication;
 
 import org.kratos.framework.Kratos;
-import org.kratos.framework.communication.command.GetGamelistCommand;
-import org.kratos.framework.communication.command.GetPlayerlistCommand;
-import org.kratos.framework.communication.command.LoginCommand;
-import org.kratos.framework.communication.command.LogoutCommand;
-import org.kratos.framework.communication.listener.ChallengeListener;
+import org.kratos.framework.communication.command.*;
+import org.kratos.framework.communication.listener.ChallengeRequestListener;
 import org.kratos.framework.communication.listener.ConnectListener;
 import org.kratos.framework.communication.telnet.TelnetHandler;
 
@@ -38,7 +35,15 @@ public class Communication implements Runnable {
         ERROR_LOGIN_DUPLICATE_NAME,
         ERROR_LOGIN_ALREADY_LOGGED_IN,
         ERROR_LOGIN_NO_NAME,
+
+        ERROR_CHALLENGE_UNKNOWN_PLAYER,
+        ERROR_CHALLENGE_UNKNOWN_GAME,
+        ERROR_CHALLENGE_ILLEGAL_ARGUMENTS,
+
         ERROR_GET_UNKNOWN_ARGUMENT,
+
+        ERROR_SUBSCRIBE_UNKNOWN_GAME,
+
         ERROR_CONNECT_REFUSED
     }
 
@@ -93,12 +98,20 @@ public class Communication implements Runnable {
         GetGamelistCommand getGamelistCommand = new GetGamelistCommand(this);
         commands.put("getGamelist", getGamelistCommand);
         handler.addListener(getGamelistCommand.getListener());
+
+        ChallengeCommand challengeCommand = new ChallengeCommand(this);
+        commands.put("challenge", challengeCommand);
+        handler.addListener(challengeCommand.getListener());
+
+        SubscribeCommand subscribeCommand = new SubscribeCommand(this);
+        commands.put("subscribe", subscribeCommand);
+        handler.addListener(subscribeCommand.getListener());
     }
 
     public void registerListeners() {
-        ChallengeListener challengeListener = new ChallengeListener();
-        listeners.put("challenge", challengeListener);
-        handler.addListener(challengeListener);
+        ChallengeRequestListener challengeRequestListener = new ChallengeRequestListener();
+        listeners.put("challengeRequest", challengeRequestListener);
+        handler.addListener(challengeRequestListener);
 
         ConnectListener connectListener = new ConnectListener();
         listeners.put("connect", connectListener);

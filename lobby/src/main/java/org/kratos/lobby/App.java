@@ -17,6 +17,9 @@ public class App {
     private JFrame loginFrame;
     private JFrame lobbyFrame;
 
+    private String selectedGame;
+    private String selectedUsername;
+
     public App() {
         kratos = new Kratos();
 
@@ -61,6 +64,22 @@ public class App {
         loginFrame.setVisible(true);
         loginFrame.toFront();
         loginFrame.requestFocus();
+    }
+
+    public String getSelectedGame() {
+        return selectedGame;
+    }
+
+    public void setSelectedGame(String game) {
+        selectedGame = game;
+    }
+
+    public String getSelectedUsername() {
+        return selectedUsername;
+    }
+
+    public void setSelectedUsername(String username) {
+        selectedUsername = username;
     }
 
     public JFrame getLoginFrame() {

@@ -4,32 +4,31 @@ import org.kratos.framework.communication.CommandListener;
 import org.kratos.framework.communication.Communication;
 import org.kratos.framework.communication.CommunicationCommand;
 import org.kratos.framework.communication.CommunicationListener;
-import org.kratos.framework.communication.listener.ChallengeListener;
+import org.kratos.framework.communication.listener.SubscribeListener;
 
 /**
  * Created by FakeYou on 4/6/14.
  */
-public class ChallengeCommand implements CommunicationCommand {
+public class SubscribeCommand implements CommunicationCommand {
 
     private Communication communication;
-    private ChallengeListener listener;
+    private SubscribeListener listener;
 
-    public ChallengeCommand(Communication communication) {
+    public SubscribeCommand(Communication communication) {
         this.communication = communication;
-        listener = new ChallengeListener(this);
+        listener = new SubscribeListener(this);
     }
 
     @Override
     public void execute(String ... arguments) throws Exception {
-        if(arguments.length != 2) {
-            throw new Exception("ChallengeCommand: not enough arguments");
+        if(arguments.length != 1) {
+            throw new Exception("SubscribeCommand: not enough arguments");
         }
 
-        String challengee = arguments[0];
-        String game = arguments[1];
+        String game = arguments[0];
 
         listener.setListening(true);
-        communication.getHandler().write("challenge \"" + challengee + "\" \"" + game + "\"");
+        communication.getHandler().write("subscribe " + game);
     }
 
     @Override
@@ -40,4 +39,5 @@ public class ChallengeCommand implements CommunicationCommand {
     public CommunicationListener getListener() {
         return listener;
     }
+
 }

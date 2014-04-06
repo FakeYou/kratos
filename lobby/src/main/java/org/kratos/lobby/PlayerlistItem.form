@@ -21,7 +21,8 @@
       <component id="2078f" class="javax.swing.JButton" binding="challengeButton">
         <constraints>
           <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false">
-            <maximum-size width="100" height="-1"/>
+            <preferred-size width="100" height="-1"/>
+            <maximum-size width="200" height="-1"/>
           </grid>
         </constraints>
         <properties>
