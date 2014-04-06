@@ -50,6 +50,9 @@ public class Login {
                 else if(status == Communication.status.ERROR_LOGIN_ALREADY_LOGGED_IN) {
                     setErrorLabel("Already logged in");
                 }
+                else if(status == Communication.status.ERROR_LOGIN_NO_NAME) {
+                    setErrorLabel("No name entered");
+                }
                 else {
                     setErrorLabel("Unknown error");
                 }

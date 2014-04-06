@@ -3,20 +3,21 @@ package org.kratos.framework.communication.listener;
 import org.kratos.framework.communication.CommandListener;
 import org.kratos.framework.communication.Communication;
 import org.kratos.framework.communication.CommunicationListener;
-import org.kratos.framework.communication.command.GetCommand;
+import org.kratos.framework.communication.command.GetGamelistCommand;
+import org.kratos.framework.communication.command.GetPlayerlistCommand;
 
 import java.util.ArrayList;
 
 /**
  * Created by FakeYou on 3/29/14.
  */
-public class GetListener implements CommunicationListener {
+public class GetGamelistListener implements CommunicationListener {
 
-    private GetCommand command;
+    private GetGamelistCommand command;
     private Boolean listening = true;
     private ArrayList<CommandListener> listeners;
 
-    public GetListener(GetCommand command) {
+    public GetGamelistListener(GetGamelistCommand command) {
         this.command = command;
 
         listeners = new ArrayList<CommandListener>();
@@ -27,16 +28,10 @@ public class GetListener implements CommunicationListener {
         String OkPattern = "^(OK)$";
         String ErrPattern = "^(ERR).+";
         String ErrUnknownArgumentPattern = "^(ERR Unknown GET argument: \').+(\')$";
-        String PlayerlistPattern = "^(SVR PLAYERLIST \\[).*(\\])$";
         String GamelistPattern = "^(SVR GAMELIST \\[).*(\\])$";
 
         if(message.matches(OkPattern)) {
             return resolved.PARTIAL;
-        }
-        else if(message.matches(PlayerlistPattern)) {
-            informListeners(Communication.status.OK, message);
-            listening = false;
-            return resolved.COMPLETE;
         }
         else if(message.matches(GamelistPattern)) {
             informListeners(Communication.status.OK, message);
@@ -69,12 +64,25 @@ public class GetListener implements CommunicationListener {
 
     @Override
     public void addListener(CommandListener listener) {
-        listeners.add(listener);
+        if(!listeners.contains(listener)) {
+            listeners.add(listener);
+        }
+    }
+
+    public void removeListener(CommandListener listener) {
+        listeners.remove(listener);
     }
 
     private void informListeners(Communication.status status, String response) {
+        ArrayList<CommandListener> listeners = (ArrayList<CommandListener>) this.listeners.clone();
+
         for(CommandListener listener : listeners) {
-            listener.trigger(status, response);
+            if(listener.active) {
+                listener.trigger(status, response);
+            }
+            else {
+                this.listeners.remove(listener);
+            }
         }
     }
 

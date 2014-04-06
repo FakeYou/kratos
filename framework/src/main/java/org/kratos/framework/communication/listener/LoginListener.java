@@ -28,6 +28,7 @@ public class LoginListener implements CommunicationListener {
         String ErrPattern = "^(ERR).+";
         String ErrDuplicatePattern = "^(ERR Duplicate name exists)$";
         String ErrLoggedInPattern = "^(ERR Already logged in)$";
+        String ErrNoNameEntered = "^(ERR No name entered)$";
 
         if(message.matches(OkPattern)) {
             informListeners(Communication.status.OK, "logged in");
@@ -41,6 +42,11 @@ public class LoginListener implements CommunicationListener {
         }
         else if(message.matches(ErrLoggedInPattern)) {
             informListeners(Communication.status.ERROR_LOGIN_ALREADY_LOGGED_IN, "already logged in");
+            listening = false;
+            return resolved.COMPLETE;
+        }
+        else if(message.matches(ErrNoNameEntered)) {
+            informListeners(Communication.status.ERROR_LOGIN_NO_NAME, "no name entered");
             listening = false;
             return resolved.COMPLETE;
         }
@@ -65,12 +71,25 @@ public class LoginListener implements CommunicationListener {
 
     @Override
     public void addListener(CommandListener listener) {
-        listeners.add(listener);
+        if(!listeners.contains(listener)) {
+            listeners.add(listener);
+        }
+    }
+
+    public void removeListener(CommandListener listener) {
+        listeners.remove(listener);
     }
 
     private void informListeners(Communication.status status, String response) {
+        ArrayList<CommandListener> listeners = (ArrayList<CommandListener>) this.listeners.clone();
+
         for(CommandListener listener : listeners) {
-            listener.trigger(status, response);
+            if(listener.active) {
+                listener.trigger(status, response);
+            }
+            else {
+                this.listeners.remove(listener);
+            }
         }
     }
 }

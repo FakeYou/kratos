@@ -41,8 +41,15 @@ public class ChallengeListener implements CommunicationListener {
     }
 
     private void informListeners(Communication.status status, String response) {
+        ArrayList<CommandListener> listeners = (ArrayList<CommandListener>) this.listeners.clone();
+
         for(CommandListener listener : listeners) {
-            listener.trigger(status, response);
+            if(listener.active) {
+                listener.trigger(status, response);
+            }
+            else {
+                this.listeners.remove(listener);
+            }
         }
     }
 
@@ -51,5 +58,9 @@ public class ChallengeListener implements CommunicationListener {
         if(!listeners.contains(listener)) {
             listeners.add(listener);
         }
+    }
+
+    public void removeListener(CommandListener listener) {
+        listeners.remove(listener);
     }
 }

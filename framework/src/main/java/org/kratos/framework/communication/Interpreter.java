@@ -23,12 +23,16 @@ public class Interpreter {
         communication.command("login", listener, username);
     }
 
+    public void logout(CommandListener listener) {
+        communication.command("logout", listener);
+    }
+
     public void getPlayerlist(CommandListener listener) {
-        communication.command("get", listener, "playerlist");
+        communication.command("getPlayerlist", listener);
     }
 
     public void getGamelist(CommandListener listener) {
-        communication.command("get", listener, "gamelist");
+        communication.command("getGamelist", listener);
     }
 
     public void get(String argument, CommandListener listener) {

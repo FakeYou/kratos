@@ -1,8 +1,10 @@
 package org.kratos.framework.communication;
 
 import org.kratos.framework.Kratos;
-import org.kratos.framework.communication.command.GetCommand;
+import org.kratos.framework.communication.command.GetGamelistCommand;
+import org.kratos.framework.communication.command.GetPlayerlistCommand;
 import org.kratos.framework.communication.command.LoginCommand;
+import org.kratos.framework.communication.command.LogoutCommand;
 import org.kratos.framework.communication.listener.ChallengeListener;
 import org.kratos.framework.communication.listener.ConnectListener;
 import org.kratos.framework.communication.telnet.TelnetHandler;
@@ -35,6 +37,7 @@ public class Communication implements Runnable {
         ERROR,
         ERROR_LOGIN_DUPLICATE_NAME,
         ERROR_LOGIN_ALREADY_LOGGED_IN,
+        ERROR_LOGIN_NO_NAME,
         ERROR_GET_UNKNOWN_ARGUMENT,
         ERROR_CONNECT_REFUSED
     }
@@ -80,9 +83,16 @@ public class Communication implements Runnable {
         commands.put("login", loginCommand);
         handler.addListener(loginCommand.getListener());
 
-        GetCommand getCommand = new GetCommand(this);
-        commands.put("get", getCommand);
-        handler.addListener(getCommand.getListener());
+        LogoutCommand logoutCommand = new LogoutCommand(this);
+        commands.put("logout", logoutCommand);
+
+        GetPlayerlistCommand getPlayerlistCommand = new GetPlayerlistCommand(this);
+        commands.put("getPlayerlist", getPlayerlistCommand);
+        handler.addListener(getPlayerlistCommand.getListener());
+
+        GetGamelistCommand getGamelistCommand = new GetGamelistCommand(this);
+        commands.put("getGamelist", getGamelistCommand);
+        handler.addListener(getGamelistCommand.getListener());
     }
 
     public void registerListeners() {

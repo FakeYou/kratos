@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class TelnetHandler implements CommunicationHandler {
     private boolean ready;
     private boolean busy;
+    private boolean connected;
 
     private TelnetClient client;
     private TelnetReader reader;
@@ -35,6 +36,7 @@ public class TelnetHandler implements CommunicationHandler {
     @Override
     public void connect(String host, int port) throws IOException {
         ready = false;
+        connected = true;
 
         client.connect(host, port);
 
@@ -48,6 +50,10 @@ public class TelnetHandler implements CommunicationHandler {
     @Override
     public void disconnect() {
         ready = false;
+        connected = false;
+
+        readerThread.stop();
+        writerThread.stop();
 
         try {
             client.disconnect();
@@ -56,8 +62,6 @@ public class TelnetHandler implements CommunicationHandler {
             System.err.println("[TelnetHandler/connect] " + e.getMessage());
             e.printStackTrace();
         }
-
-        readerThread.stop();
     }
 
     @Override
@@ -73,6 +77,10 @@ public class TelnetHandler implements CommunicationHandler {
 
     public Boolean isBusy() {
         return busy;
+    }
+
+    public boolean isConnected() {
+        return connected;
     }
 
     public void setBusy(Boolean busy) {

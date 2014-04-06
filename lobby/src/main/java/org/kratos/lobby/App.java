@@ -54,4 +54,12 @@ public class App {
 
         lobby.reload();
     }
+
+    public void openLogin() {
+        lobbyFrame.setVisible(false);
+
+        loginFrame.setVisible(true);
+        loginFrame.toFront();
+        loginFrame.requestFocus();
+    }
 }

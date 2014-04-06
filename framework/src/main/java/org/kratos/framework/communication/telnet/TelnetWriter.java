@@ -30,12 +30,14 @@ public class TelnetWriter implements Runnable {
     }
 
     public void write(String message) throws Exception {
-        System.out.println("[TelnetWriter/write] Sending message: \"" + message + "\"");
+        if(handler.isConnected()) {
+            System.out.println("[TelnetWriter/write] Sending message: \"" + message + "\"");
 
-        OutputStream output = client.getOutputStream();
-        message = message + "\r\n";
+            OutputStream output = client.getOutputStream();
+            message = message + "\r\n";
 
-        output.write(message.getBytes());
-        output.flush();
+            output.write(message.getBytes());
+            output.flush();
+        }
     }
 }

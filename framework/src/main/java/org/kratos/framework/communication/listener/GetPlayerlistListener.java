@@ -2,43 +2,49 @@ package org.kratos.framework.communication.listener;
 
 import org.kratos.framework.communication.CommandListener;
 import org.kratos.framework.communication.Communication;
-import org.kratos.framework.communication.CommunicationHandler;
 import org.kratos.framework.communication.CommunicationListener;
+import org.kratos.framework.communication.command.GetPlayerlistCommand;
 
 import java.util.ArrayList;
 
 /**
- * Created by FakeYou on 4/5/14.
+ * Created by FakeYou on 3/29/14.
  */
-public class ConnectListener implements CommunicationListener {
+public class GetPlayerlistListener implements CommunicationListener {
 
+    private GetPlayerlistCommand command;
     private Boolean listening = true;
     private ArrayList<CommandListener> listeners;
 
-    public ConnectListener() {
+    public GetPlayerlistListener(GetPlayerlistCommand command) {
+        this.command = command;
+
         listeners = new ArrayList<CommandListener>();
     }
 
     @Override
     public resolved trigger(String message) {
-        String WelcomeMessagePattern = "^(Strategic Game Server \\[Version 1.0\\])$";
-        String CopyrightMessage = "^(\\(C\\) Copyright 2009 Hanze Hogeschool Groningen)$";
-        String ConnectionRefusedPattern = "^(Connection refused: connect)$";
-        String ConnectionErrorPattern = "^(error)$";
+        String OkPattern = "^(OK)$";
+        String ErrPattern = "^(ERR).+";
+        String ErrUnknownArgumentPattern = "^(ERR Unknown GET argument: \').+(\')$";
+        String PlayerlistPattern = "^(SVR PLAYERLIST \\[).*(\\])$";
 
-        if(message.matches(WelcomeMessagePattern)) {
+        if(message.matches(OkPattern)) {
             return resolved.PARTIAL;
         }
-        else if(message.matches(CopyrightMessage)) {
+        else if(message.matches(PlayerlistPattern)) {
             informListeners(Communication.status.OK, message);
+            listening = false;
             return resolved.COMPLETE;
         }
-        else if(message.matches(ConnectionRefusedPattern)) {
-            informListeners(Communication.status.ERROR_CONNECT_REFUSED, message);
+        else if(message.matches(ErrUnknownArgumentPattern)) {
+            informListeners(Communication.status.ERROR_GET_UNKNOWN_ARGUMENT, "unknown argument");
+            listening = false;
             return resolved.COMPLETE;
         }
-        else if(message.matches(ConnectionErrorPattern)) {
-            informListeners(Communication.status.ERROR, message);
+        else if(message.matches(ErrPattern)) {
+            informListeners(Communication.status.ERROR, "unknown error");
+            listening = false;
             return resolved.COMPLETE;
         }
 
@@ -55,6 +61,17 @@ public class ConnectListener implements CommunicationListener {
         return listening;
     }
 
+    @Override
+    public void addListener(CommandListener listener) {
+        if(!listeners.contains(listener)) {
+            listeners.add(listener);
+        }
+    }
+
+    public void removeListener(CommandListener listener) {
+        listeners.remove(listener);
+    }
+
     private void informListeners(Communication.status status, String response) {
         ArrayList<CommandListener> listeners = (ArrayList<CommandListener>) this.listeners.clone();
 
@@ -68,14 +85,4 @@ public class ConnectListener implements CommunicationListener {
         }
     }
 
-    @Override
-    public void addListener(CommandListener listener) {
-        if(!listeners.contains(listener)) {
-            listeners.add(listener);
-        }
-    }
-
-    public void removeListener(CommandListener listener) {
-        listeners.remove(listener);
-    }
 }
