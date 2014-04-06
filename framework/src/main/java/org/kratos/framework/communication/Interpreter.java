@@ -10,6 +10,15 @@ public class Interpreter {
         this.communication = communication;
     }
 
+    public void connect(String host, int port, CommandListener listener) {
+        communication.getCommunicaionListener("connect").addListener(listener);
+        communication.connect(host, port);
+    }
+
+    public void disconnect() {
+        communication.disconnect();
+    }
+
     public void login(String username, CommandListener listener) {
         communication.command("login", listener, username);
     }

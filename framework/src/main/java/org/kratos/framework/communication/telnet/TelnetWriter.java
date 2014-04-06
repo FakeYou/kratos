@@ -18,17 +18,12 @@ public class TelnetWriter {
     }
 
     public void write(String message) throws Exception {
-        if(handler.isReady()) {
-            System.out.println("[TelnetWriter/write] Sending message: \"" + message + "\"");
+        System.out.println("[TelnetWriter/write] Sending message: \"" + message + "\"");
 
-            OutputStream output = client.getOutputStream();
-            message = message + "\r\n";
+        OutputStream output = client.getOutputStream();
+        message = message + "\r\n";
 
-            output.write(message.getBytes());
-            output.flush();
-        }
-        else {
-            throw new Exception("Handler not ready");
-        }
+        output.write(message.getBytes());
+        output.flush();
     }
 }

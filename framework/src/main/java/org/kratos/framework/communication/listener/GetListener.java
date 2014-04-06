@@ -1,6 +1,7 @@
 package org.kratos.framework.communication.listener;
 
 import org.kratos.framework.communication.CommandListener;
+import org.kratos.framework.communication.Communication;
 import org.kratos.framework.communication.CommunicationListener;
 import org.kratos.framework.communication.command.GetCommand;
 
@@ -33,22 +34,22 @@ public class GetListener implements CommunicationListener {
             return true;
         }
         else if(message.matches(PlayerlistPattern)) {
-            informListeners(true, message);
+            informListeners(Communication.status.OK, message);
             listening = false;
             return true;
         }
         else if(message.matches(GamelistPattern)) {
-            informListeners(true, message);
+            informListeners(Communication.status.OK, message);
             listening = false;
             return true;
         }
         else if(message.matches(ErrUnknownArgumentPattern)) {
-            informListeners(false, "unknown argument");
+            informListeners(Communication.status.ERROR_GET_UNKNOWN_ARGUMENT, "unknown argument");
             listening = false;
             return true;
         }
         else if(message.matches(ErrPattern)) {
-            informListeners(false, "unknown error");
+            informListeners(Communication.status.ERROR, "unknown error");
             listening = false;
             return true;
         }
@@ -71,9 +72,9 @@ public class GetListener implements CommunicationListener {
         listeners.add(listener);
     }
 
-    private void informListeners(Boolean success, String response) {
+    private void informListeners(Communication.status status, String response) {
         for(CommandListener listener : listeners) {
-            listener.trigger(success, response);
+            listener.trigger(status, response);
         }
     }
 

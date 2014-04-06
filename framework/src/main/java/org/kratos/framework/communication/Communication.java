@@ -5,8 +5,10 @@ import org.kratos.framework.Kratos;
 import org.kratos.framework.communication.command.GetCommand;
 import org.kratos.framework.communication.command.LoginCommand;
 import org.kratos.framework.communication.listener.ChallengeListener;
+import org.kratos.framework.communication.listener.ConnectListener;
 import org.kratos.framework.communication.telnet.TelnetHandler;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 /**
@@ -25,6 +27,15 @@ public class Communication {
     private HashMap<String, CommunicationListener> listeners;
 
     private boolean loop;
+
+    public enum status {
+        OK,
+        ERROR,
+        ERROR_LOGIN_DUPLICATE_NAME,
+        ERROR_LOGIN_ALREADY_LOGGED_IN,
+        ERROR_GET_UNKNOWN_ARGUMENT,
+        ERROR_CONNECT_REFUSED
+    }
 
     public Communication(Kratos kratos) {
         this.kratos = kratos;
@@ -55,14 +66,22 @@ public class Communication {
         ChallengeListener challengeListener = new ChallengeListener();
         listeners.put("challenge", challengeListener);
         handler.addListener(challengeListener);
+
+        ConnectListener connectListener = new ConnectListener();
+        listeners.put("connect", connectListener);
+        handler.addListener(connectListener);
     }
 
     public void connect(String host, int port) {
         this.host = host;
         this.port = port;
 
-        handler.connect(host, port);
-        connected = true;
+        try {
+            handler.connect(host, port);
+            connected = true;
+        } catch (IOException e) {
+            listeners.get("connect").trigger(e.getMessage());
+        }
     }
 
     public void disconnect() {
@@ -71,7 +90,7 @@ public class Communication {
     }
 
     public void command(String command, CommandListener listener, String ... arguments) {
-        if(connected && handler.isReady()) {
+        if(connected) {
             try {
                 commands.get(command).execute(arguments);
                 commands.get(command).addListener(listener);
@@ -82,28 +101,16 @@ public class Communication {
         }
     }
 
-    public void login(String username, CommandListener listener) {
-        if(connected && handler.isReady()) {
-            try {
-                commands.get("login").execute(username);
-                commands.get("login").addListener(listener);
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
+    public CommunicationListener getCommunicaionListener(String name) {
+        if(listeners.containsKey(name)) {
+            return listeners.get(name);
         }
+
+        return null;
     }
 
-    public void get(String argument, CommandListener listener) {
-        if(connected && handler.isReady()) {
-            try {
-                commands.get("get").execute(argument);
-                commands.get("get").addListener(listener);
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+    public boolean isConnected() {
+        return connected;
     }
 
     public CommunicationHandler getHandler() {

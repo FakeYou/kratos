@@ -31,20 +31,10 @@ public class TelnetHandler implements CommunicationHandler {
     }
 
     @Override
-    public void connect(String host, int port) {
+    public void connect(String host, int port) throws IOException {
         ready = false;
 
-        try {
-            client.connect(host, port);
-        }
-        catch (SocketException e) {
-            System.err.println("[TelnetHandler/connect] " + e.getMessage());
-            e.printStackTrace();
-        }
-        catch (IOException e) {
-            System.err.println("[TelnetHandler/connect] " + e.getMessage());
-            e.printStackTrace();
-        }
+        client.connect(host, port);
 
         readerThread = new Thread(reader);
         readerThread.start();

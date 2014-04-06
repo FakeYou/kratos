@@ -1,10 +1,12 @@
 package org.kratos.framework.communication;
 
+import java.io.IOException;
+
 /**
  * Created by FakeYou on 3/29/14.
  */
 public interface CommunicationHandler {
-    public void connect(String host, int port);
+    public void connect(String host, int port) throws IOException;
     public void disconnect();
 
     public Boolean isReady();

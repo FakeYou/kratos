@@ -17,18 +17,8 @@ public class Kratos {
     public Kratos() {
         settings = new Settings();
         settings.loadSettingsFile("./framework/src/main/resources/settings.json");
-    }
 
-    public void connect() {
-        String host = getSetting("host").getAsString();
-        int port = getSetting("port").getAsInt();
-
-        connect(host, port);
-    }
-
-    public void connect(String host, int port) {
         communication = new Communication(this);
-        communication.connect(host, port);
 
         interpreter = new Interpreter(communication);
     }

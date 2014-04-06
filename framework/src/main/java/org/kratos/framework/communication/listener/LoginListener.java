@@ -1,6 +1,7 @@
 package org.kratos.framework.communication.listener;
 
 import org.kratos.framework.communication.CommandListener;
+import org.kratos.framework.communication.Communication;
 import org.kratos.framework.communication.CommunicationListener;
 import org.kratos.framework.communication.command.LoginCommand;
 
@@ -29,22 +30,22 @@ public class LoginListener implements CommunicationListener {
         String ErrLoggedInPattern = "^(ERR Already logged in)$";
 
         if(message.matches(OkPattern)) {
-            informListeners(true, "logged in");
+            informListeners(Communication.status.OK, "logged in");
             listening = false;
             return true;
         }
         else if(message.matches(ErrDuplicatePattern)) {
-            informListeners(false, "duplicate name");
+            informListeners(Communication.status.ERROR_LOGIN_DUPLICATE_NAME, "duplicate name");
             listening = false;
             return true;
         }
         else if(message.matches(ErrLoggedInPattern)) {
-            informListeners(false, "already logged in");
+            informListeners(Communication.status.ERROR_LOGIN_ALREADY_LOGGED_IN, "already logged in");
             listening = false;
             return true;
         }
         else if(message.matches(ErrPattern)) {
-            informListeners(false, "unknown error");
+            informListeners(Communication.status.ERROR, "unknown error");
             listening = false;
             return true;
         }
@@ -67,9 +68,9 @@ public class LoginListener implements CommunicationListener {
         listeners.add(listener);
     }
 
-    private void informListeners(Boolean success, String response) {
+    private void informListeners(Communication.status status, String response) {
         for(CommandListener listener : listeners) {
-            listener.trigger(success, response);
+            listener.trigger(status, response);
         }
     }
 }

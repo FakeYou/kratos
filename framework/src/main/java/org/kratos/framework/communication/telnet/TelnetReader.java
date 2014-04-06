@@ -45,30 +45,18 @@ public class TelnetReader implements Runnable {
                 chunk = chunk.replace("\n", "").replace("\r", "");
                 response += chunk;
 
-//                System.out.print(chunk);
+                for(CommunicationListener listener : listeners) {
+                    if(!listener.isListening()) {
+                        continue;
+                    }
 
-                if(handler.isReady()) {
-                    for(CommunicationListener listener : listeners) {
-                        if(!listener.isListening()) {
-                            continue;
-                        }
+                    boolean success = listener.trigger(response);
 
-                        boolean success = listener.trigger(response);
-
-                        if(success) {
-                            response = "";
-                            break;
-                        }
+                    if(success) {
+                        response = "";
+                        break;
                     }
                 }
-            }
-
-            if(response.startsWith(
-                "Strategic Game Server [Version 1.0]" +
-                "(C) Copyright 2009 Hanze Hogeschool Groningen"
-            )) {
-                handler.setReady(true);
-                response = "";
             }
         }
     }
