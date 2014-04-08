@@ -31,7 +31,7 @@ public class MoveCommandHandler extends AbstractCommandHandler {
 		Match match = client.getCurrentMatch();
 		
 		if(match == null || match.isFinished()) {
-			client.writeResponse(new ErrorResponse("Not in any match"));
+			client.writeResponse(new ErrorResponse("Not in any game"));
 			return;
 		}
 		
@@ -47,7 +47,7 @@ public class MoveCommandHandler extends AbstractCommandHandler {
 
 	@Override
 	public String getDesciption() {
-		return "Make a game move in current match";
+		return "Make a game move in current game";
 	}
 
 	@Override

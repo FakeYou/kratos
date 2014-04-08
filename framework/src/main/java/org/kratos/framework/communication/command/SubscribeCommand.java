@@ -9,13 +9,10 @@ import org.kratos.framework.communication.listener.SubscribeListener;
 /**
  * Created by FakeYou on 4/6/14.
  */
-public class SubscribeCommand implements CommunicationCommand {
-
-    private Communication communication;
-    private SubscribeListener listener;
+public class SubscribeCommand extends AbstractCommand {
 
     public SubscribeCommand(Communication communication) {
-        this.communication = communication;
+        super(communication);
         listener = new SubscribeListener(this);
     }
 
@@ -30,14 +27,4 @@ public class SubscribeCommand implements CommunicationCommand {
         listener.setListening(true);
         communication.getHandler().write("subscribe " + game);
     }
-
-    @Override
-    public void addListener(CommandListener listener) {
-        this.listener.addListener(listener);
-    }
-
-    public CommunicationListener getListener() {
-        return listener;
-    }
-
 }

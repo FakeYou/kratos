@@ -9,13 +9,10 @@ import org.kratos.framework.communication.listener.GetPlayerlistListener;
 /**
  * Created by FakeYou on 3/29/14.
  */
-public class GetPlayerlistCommand implements CommunicationCommand {
-
-    private Communication communication;
-    private GetPlayerlistListener listener;
+public class GetPlayerlistCommand extends AbstractCommand {
 
     public GetPlayerlistCommand(Communication communication) {
-        this.communication = communication;
+        super(communication);
         listener = new GetPlayerlistListener(this);
     }
 
@@ -28,14 +25,4 @@ public class GetPlayerlistCommand implements CommunicationCommand {
         listener.setListening(true);
         communication.getHandler().write("get playerlist");
     }
-
-    @Override
-    public void addListener(CommandListener listener) {
-        this.listener.addListener(listener);
-    }
-
-    public CommunicationListener getListener() {
-        return listener;
-    }
-
 }

@@ -1,4 +1,4 @@
-package org.kratos.framework.match;
+package org.kratos.framework.game;
 
 /**
  * Created by FakeYou on 4/6/14.

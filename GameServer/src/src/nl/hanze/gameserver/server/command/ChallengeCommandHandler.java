@@ -26,7 +26,7 @@ public class ChallengeCommandHandler extends AbstractCommandHandler {
 		}
 		
 		if(client.getCurrentMatch() != null) {
-			client.writeResponse(new ErrorResponse("Currently in match"));
+			client.writeResponse(new ErrorResponse("Currently in game"));
 		}
 		
 		if(Application.getInstance().getGameServer().getClientManager().getTournament() != null) {

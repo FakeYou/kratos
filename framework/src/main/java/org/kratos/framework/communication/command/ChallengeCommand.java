@@ -9,13 +9,10 @@ import org.kratos.framework.communication.listener.ChallengeListener;
 /**
  * Created by FakeYou on 4/6/14.
  */
-public class ChallengeCommand implements CommunicationCommand {
-
-    private Communication communication;
-    private ChallengeListener listener;
+public class ChallengeCommand extends AbstractCommand {
 
     public ChallengeCommand(Communication communication) {
-        this.communication = communication;
+        super(communication);
         listener = new ChallengeListener(this);
     }
 
@@ -30,14 +27,5 @@ public class ChallengeCommand implements CommunicationCommand {
 
         listener.setListening(true);
         communication.getHandler().write("challenge \"" + challengee + "\" \"" + game + "\"");
-    }
-
-    @Override
-    public void addListener(CommandListener listener) {
-        this.listener.addListener(listener);
-    }
-
-    public CommunicationListener getListener() {
-        return listener;
     }
 }

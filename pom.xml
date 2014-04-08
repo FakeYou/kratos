@@ -12,6 +12,7 @@
     <modules>
         <module>framework</module>
         <module>lobby</module>
+        <module>guess</module>
     </modules>
 
     <build>

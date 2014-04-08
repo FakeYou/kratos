@@ -19,15 +19,15 @@ import java.awt.Component;
 public interface IGameModule {
 	
 	/**
-	 * Starts the match.
-	 * @throws IllegalStateException If the match is already started or the match has finished
+	 * Starts the game.
+	 * @throws IllegalStateException If the game is already started or the game has finished
 	 */
 	public void start() throws IllegalStateException;
 	
 	/**
 	 * Returns the name of the player who is to move next.
 	 * @return The name of the player who is to move next
-	 * @throws IllegalStateException If the match has not yet been started or the match has finished
+	 * @throws IllegalStateException If the game has not yet been started or the game has finished
 	 */
 	public String getPlayerToMove() throws IllegalStateException;
 	
@@ -35,7 +35,7 @@ public interface IGameModule {
 	 * Does a move for the given player.
 	 * @param player The player doing the move
 	 * @param move The move the player is doing
-	 * @throws IllegalStateException If the match is not yet started, the match has finished or it is not player's turn
+	 * @throws IllegalStateException If the game is not yet started, the game has finished or it is not player's turn
 	 */
 	public void doPlayerMove(String player, String move) throws IllegalStateException;
 	
@@ -44,34 +44,34 @@ public interface IGameModule {
 	 * <p>
 	 * The message is game specific and may be empty.
 	 * @return A message to the player of the next turn.
-	 * @throws IllegalStateException If the match has not yet been started or the match has finished
+	 * @throws IllegalStateException If the game has not yet been started or the game has finished
 	 */
 	public String getTurnMessage() throws IllegalStateException;
 	
 	/**
-	 * Returns the details of the last move done during this match.
+	 * Returns the details of the last move done during this game.
 	 * <p>
 	 * These details are game specific and may be empty.
 	 * @return A string representing the details of the last move
-	 * @throws IllegalStateException If no move has been done during this match
+	 * @throws IllegalStateException If no move has been done during this game
 	 */
 	public String getMoveDetails() throws IllegalStateException;
 	
 	/**
-	 * Returns the status of the match.
+	 * Returns the status of the game.
 	 * <p>
-	 * The return code can either indicate that the match has been started, is in progress or has been finished.
-	 * @return <code>-1</code> if the match has not yet started, <code>0</code> if the match is started and has not yet finished, <code>1</code> if the match has finished
+	 * The return code can either indicate that the game has been started, is in progress or has been finished.
+	 * @return <code>-1</code> if the game has not yet started, <code>0</code> if the game is started and has not yet finished, <code>1</code> if the game has finished
 	 */
 	public int getMatchStatus();
 	
 	/**
-	 * Returns the result of the match for a given player.
+	 * Returns the result of the game for a given player.
 	 * <p>
-	 * The return code will indicate if the player has won the match, has lost the match or the match has ended in a draw.
+	 * The return code will indicate if the player has won the game, has lost the game or the game has ended in a draw.
 	 * @param player The player to whom the result belong to.
-	 * @return <code>-1</code> if the player lost the match, <code>0</code> if the match resulted in a draw, <code>1</code> if the player won the match
-	 * @throws IllegalStateException If the match has not yet finished
+	 * @return <code>-1</code> if the player lost the game, <code>0</code> if the game resulted in a draw, <code>1</code> if the player won the game
+	 * @throws IllegalStateException If the game has not yet finished
 	 */
 	public int getPlayerResult(String player) throws IllegalStateException;
 	
@@ -80,24 +80,24 @@ public interface IGameModule {
 	 * <p>
 	 * These results are game specific.
 	 * @return An integer representing the score of a player
-	 * @throws IllegalStateException If the match has not yet finished
+	 * @throws IllegalStateException If the game has not yet finished
 	 */
 	public int getPlayerScore(String player) throws IllegalStateException;
 	
 	/**
-	 * Returns a string commenting the result of the match.
+	 * Returns a string commenting the result of the game.
 	 * <p>
 	 * This comment is game specific and may be empty.
-	 * @return A string commenting the result of the match
-	 * @throws IllegalStateException If the match has not yet finished
+	 * @return A string commenting the result of the game
+	 * @throws IllegalStateException If the game has not yet finished
 	 */
 	public String getMatchResultComment() throws IllegalStateException;
 	
 	/**
-	 * Returns a view of this match.
+	 * Returns a view of this game.
 	 * <p>
 	 * It is a good idea for this view to be resizable.
-	 * @return A view of the match
+	 * @return A view of the game
 	 */
 	public Component getView();
 	

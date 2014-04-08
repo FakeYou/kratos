@@ -136,7 +136,7 @@ public class ClientManager {
 		players.add(challenge.getOpponent());
 		Collections.shuffle(players);
 		
-		// Start the match
+		// Start the game
 		Match match = createMatch(challenge.getGameType(), players.get(0), players.get(1));
 		match.start();
 	}

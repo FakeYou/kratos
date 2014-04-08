@@ -9,13 +9,10 @@ import org.kratos.framework.communication.listener.LoginListener;
 /**
  * Created by FakeYou on 3/29/14.
  */
-public class LoginCommand implements CommunicationCommand {
-
-    private Communication communication;
-    private LoginListener listener;
+public class LoginCommand extends AbstractCommand {
 
     public LoginCommand(Communication communication) {
-        this.communication = communication;
+        super(communication);
         listener = new LoginListener(this);
     }
 
@@ -30,14 +27,4 @@ public class LoginCommand implements CommunicationCommand {
         listener.setListening(true);
         communication.getHandler().write("login " + username);
     }
-
-    @Override
-    public void addListener(CommandListener listener) {
-        this.listener.addListener(listener);
-    }
-
-    public CommunicationListener getListener() {
-        return listener;
-    }
-
 }

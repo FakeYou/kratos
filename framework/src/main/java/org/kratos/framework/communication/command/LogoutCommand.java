@@ -2,18 +2,14 @@ package org.kratos.framework.communication.command;
 
 import org.kratos.framework.communication.CommandListener;
 import org.kratos.framework.communication.Communication;
-import org.kratos.framework.communication.CommunicationCommand;
-import org.kratos.framework.communication.CommunicationListener;
 
 /**
  * Created by FakeYou on 4/6/14.
  */
-public class LogoutCommand implements CommunicationCommand {
-
-    private Communication communication;
+public class LogoutCommand extends AbstractCommand {
 
     public LogoutCommand(Communication communication) {
-        this.communication = communication;
+        super(communication);
     }
 
     @Override

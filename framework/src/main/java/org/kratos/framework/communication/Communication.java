@@ -31,19 +31,21 @@ public class Communication implements Runnable {
 
     public enum status {
         OK,
+        GAME_MOVE,
+        GAME_LOSS,
+        GAME_WIN,
+        GAME_MATCH,
+        GAME_YOUR_TURN,
         ERROR,
         ERROR_LOGIN_DUPLICATE_NAME,
         ERROR_LOGIN_ALREADY_LOGGED_IN,
         ERROR_LOGIN_NO_NAME,
-
         ERROR_CHALLENGE_UNKNOWN_PLAYER,
         ERROR_CHALLENGE_UNKNOWN_GAME,
         ERROR_CHALLENGE_ILLEGAL_ARGUMENTS,
-
         ERROR_GET_UNKNOWN_ARGUMENT,
-
         ERROR_SUBSCRIBE_UNKNOWN_GAME,
-
+        ERROR_MOVE_NO_MOVE_ENTERED,
         ERROR_CONNECT_REFUSED
     }
 

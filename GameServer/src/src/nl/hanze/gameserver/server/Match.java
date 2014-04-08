@@ -127,7 +127,7 @@ public class Match implements ActionListener {
 	}
 	
 	public void forfeit(Client player) {
-		finishedAbnormally(player, "Player forfeited match");
+		finishedAbnormally(player, "Player forfeited game");
 	}
 	
 	@Override

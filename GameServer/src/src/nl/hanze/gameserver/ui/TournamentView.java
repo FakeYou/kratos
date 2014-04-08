@@ -172,7 +172,7 @@ public class TournamentView extends JFrame implements ActionListener {
 					Integer playerOneResult = roundResult.getKey();
 					Integer playerTwoResult = roundResult.getValue();
 					
-					Log.DEBUG.printf("Tournament match result: %s vs. %s: %d, %d", playerOne.getPlayerName(), playerTwo.getPlayerName(), playerOneResult, playerTwoResult);
+					Log.DEBUG.printf("Tournament game result: %s vs. %s: %d, %d", playerOne.getPlayerName(), playerTwo.getPlayerName(), playerOneResult, playerTwoResult);
 				}
 				
 				startButton.setEnabled(true);

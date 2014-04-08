@@ -19,7 +19,7 @@ public class ForfeitCommandHandler extends AbstractCommandHandler {
 		Match match = client.getCurrentMatch();
 		
 		if(match == null || match.isFinished()) {
-			client.writeResponse(new ErrorResponse("Not in any match"));
+			client.writeResponse(new ErrorResponse("Not in any game"));
 		} else {
 			client.writeResponse(Response.OK);
 			match.forfeit(client);
@@ -28,7 +28,7 @@ public class ForfeitCommandHandler extends AbstractCommandHandler {
 
 	@Override
 	public String getDesciption() {
-		return "Forfeit current match";
+		return "Forfeit current game";
 	}
 
 	@Override

@@ -11,8 +11,8 @@ package nl.hanze.t23i.gamemodule.extern;
  * An implementation class should call the mandatory constructor and use the constants to indicate statuses to ensure compatibility.
  * Also the <code>GAME_TYPE</code> constant should be present, indicating the name of the game type.
  * <p>
- * It is a good idea to call methods implemented by this class when overriding, to handle match status checks.
- * Do note, the <code>IGameModule</code> interface requires <code>getMoveDetails()</code> to check if a move has been made during a match.
+ * It is a good idea to call methods implemented by this class when overriding, to handle game status checks.
+ * Do note, the <code>IGameModule</code> interface requires <code>getMoveDetails()</code> to check if a move has been made during a game.
  * 
  * @author Sjors van Oers
  * @author Hanze Hogeschool Groningen - Instituut voor ICT
@@ -21,32 +21,32 @@ package nl.hanze.t23i.gamemodule.extern;
 public abstract class AbstractGameModule implements IGameModule {
 
 	/**
-	 * Value indicating the match is initialized
+	 * Value indicating the game is initialized
 	 */
 	public static final int MATCH_INITIALIZED = -1;
 	
 	/**
-	 * Value indicating the match has started
+	 * Value indicating the game has started
 	 */
 	public static final int MATCH_STARTED = 0;
 	
 	/**
-	 * Value indicating the match has stopped
+	 * Value indicating the game has stopped
 	 */
 	public static final int MATCH_FINISHED = 1;
 	
 	/**
-	 * Value indicating the player has lost the match
+	 * Value indicating the player has lost the game
 	 */
 	public static final int PLAYER_LOSS = -1;
 	
 	/**
-	 * Value indicating the match resulted in a draw
+	 * Value indicating the game resulted in a draw
 	 */
 	public static final int PLAYER_DRAW = 0;
 	
 	/**
-	 * Value indicating the player has won the match
+	 * Value indicating the player has won the game
 	 */
 	public static final int PLAYER_WIN = 1;
 	
@@ -63,7 +63,7 @@ public abstract class AbstractGameModule implements IGameModule {
 	/**
 	 * Mandatory constructor.
 	 * <p>
-	 * This function will change the match status to initialized (constant <code>MATCH_INITIALIZED</code>).
+	 * This function will change the game status to initialized (constant <code>MATCH_INITIALIZED</code>).
 	 * 
 	 * @param playerOne
 	 * @param playerTwo
@@ -78,14 +78,14 @@ public abstract class AbstractGameModule implements IGameModule {
 	@Override
 	public void doPlayerMove(String player, String move) throws IllegalStateException {
 		if(matchStatus != MATCH_STARTED) {
-			throw new IllegalStateException("Illegal match state");
+			throw new IllegalStateException("Illegal game state");
 		}
 	}
 	
 	@Override
 	public int getPlayerScore(String player) throws IllegalStateException {
 		if(matchStatus != MATCH_FINISHED) {
-			throw new IllegalStateException("Illegal match state");
+			throw new IllegalStateException("Illegal game state");
 		}
 		
 		return 0;
@@ -94,7 +94,7 @@ public abstract class AbstractGameModule implements IGameModule {
 	@Override
 	public String getMatchResultComment() throws IllegalStateException {
 		if(matchStatus != MATCH_FINISHED) {
-			throw new IllegalStateException("Illegal match state");
+			throw new IllegalStateException("Illegal game state");
 		}
 		
 		return null;
@@ -108,7 +108,7 @@ public abstract class AbstractGameModule implements IGameModule {
 	@Override
 	public String getMoveDetails() throws IllegalStateException {
 		if(matchStatus == MATCH_INITIALIZED) {
-			throw new IllegalStateException("Illegal match state");
+			throw new IllegalStateException("Illegal game state");
 		}
 		
 		return null;
@@ -117,7 +117,7 @@ public abstract class AbstractGameModule implements IGameModule {
 	@Override
 	public String getPlayerToMove() throws IllegalStateException {
 		if(matchStatus != MATCH_STARTED) {
-			throw new IllegalStateException("Illegal match state");
+			throw new IllegalStateException("Illegal game state");
 		}
 		
 		return null;
@@ -126,7 +126,7 @@ public abstract class AbstractGameModule implements IGameModule {
 	@Override
 	public int getPlayerResult(String player) throws IllegalStateException {
 		if(matchStatus != MATCH_FINISHED) {
-			throw new IllegalStateException("Illegal match state");
+			throw new IllegalStateException("Illegal game state");
 		}
 		
 		return 0;
@@ -135,7 +135,7 @@ public abstract class AbstractGameModule implements IGameModule {
 	@Override
 	public String getTurnMessage() throws IllegalStateException {
 		if(matchStatus != MATCH_STARTED) {
-			throw new IllegalStateException("Illegal match state");
+			throw new IllegalStateException("Illegal game state");
 		}
 		
 		return null;
@@ -144,7 +144,7 @@ public abstract class AbstractGameModule implements IGameModule {
 	@Override
 	public void start() throws IllegalStateException {
 		if(matchStatus != MATCH_INITIALIZED) {
-			throw new IllegalStateException("Illegal match state");
+			throw new IllegalStateException("Illegal game state");
 		}
 		
 		matchStatus = MATCH_STARTED;

@@ -1,7 +1,6 @@
 package org.kratos.framework.communication;
 
-import org.kratos.framework.match.Challenge;
-import sun.org.mozilla.javascript.internal.json.JsonParser;
+import org.kratos.framework.game.Challenge;
 
 /**
  * Created by FakeYou on 3/29/14.

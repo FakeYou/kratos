@@ -10,16 +10,10 @@ import java.util.ArrayList;
 /**
  * Created by FakeYou on 3/29/14.
  */
-public class GetPlayerlistListener implements CommunicationListener {
-
-    private GetPlayerlistCommand command;
-    private Boolean listening = true;
-    private ArrayList<CommandListener> listeners;
+public class GetPlayerlistListener extends AbstractListener {
 
     public GetPlayerlistListener(GetPlayerlistCommand command) {
-        this.command = command;
-
-        listeners = new ArrayList<CommandListener>();
+        super(command);
     }
 
     @Override
@@ -50,39 +44,4 @@ public class GetPlayerlistListener implements CommunicationListener {
 
         return resolved.INCOMPLETE;
     }
-
-    @Override
-    public void setListening(Boolean listening) {
-        this.listening = listening;
-    }
-
-    @Override
-    public Boolean isListening() {
-        return listening;
-    }
-
-    @Override
-    public void addListener(CommandListener listener) {
-        if(!listeners.contains(listener)) {
-            listeners.add(listener);
-        }
-    }
-
-    public void removeListener(CommandListener listener) {
-        listeners.remove(listener);
-    }
-
-    private void informListeners(Communication.status status, String response) {
-        ArrayList<CommandListener> listeners = (ArrayList<CommandListener>) this.listeners.clone();
-
-        for(CommandListener listener : listeners) {
-            if(listener.active) {
-                listener.trigger(status, response);
-            }
-            else {
-                this.listeners.remove(listener);
-            }
-        }
-    }
-
 }

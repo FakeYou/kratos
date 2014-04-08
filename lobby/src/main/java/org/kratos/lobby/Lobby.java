@@ -4,7 +4,7 @@ import org.kratos.framework.Kratos;
 import org.kratos.framework.communication.CommandListener;
 import org.kratos.framework.communication.Communication;
 import org.kratos.framework.communication.Interpreter;
-import org.kratos.framework.match.Challenge;
+import org.kratos.framework.game.Challenge;
 
 import javax.swing.*;
 import java.awt.*;

@@ -21,6 +21,11 @@ public class App {
     private String selectedUsername;
 
     public App() {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        }
+        catch (Exception ex) { }
+
         kratos = new Kratos();
 
         login = new Login(this, kratos);
