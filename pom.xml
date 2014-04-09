@@ -36,4 +36,40 @@
         </resources>
     </build>
 
+    <dependencies>
+
+        <dependency>
+            <groupId>nl.hanze.t23i</groupId>
+            <artifactId>gamemodule</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/framework/lib/gamemodule-1.0.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>nl.hanze.t23i</groupId>
+            <artifactId>gamemodule</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/framework/lib/GuessGame.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>nl.hanze.t23i</groupId>
+            <artifactId>gamemodule</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/framework/lib/GuessGameDeluxe.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>nl.hanze.t23i</groupId>
+            <artifactId>gamemodule</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/framework/lib/UltraGuessGame.jar</systemPath>
+        </dependency>
+
+    </dependencies>
+
 </project>
