@@ -13,6 +13,7 @@
         <module>framework</module>
         <module>lobby</module>
         <module>guess</module>
+        <module>reversi</module>
     </modules>
 
     <build>
