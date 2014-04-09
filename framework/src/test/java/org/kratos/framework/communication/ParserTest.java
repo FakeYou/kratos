@@ -1,6 +1,7 @@
 package org.kratos.framework.communication;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.kratos.framework.game.events.Challenge;
 import org.kratos.framework.game.events.Move;
@@ -8,9 +9,10 @@ import org.kratos.framework.game.events.Move;
 /**
  * Created by FakeYou on 4/9/14.
  */
-public class ParserTest extends TestCase {
+public class ParserTest {
     private Parser parser;
 
+    @Before
     public void setUp() {
         parser = new Parser();
     }
@@ -21,10 +23,10 @@ public class ParserTest extends TestCase {
 
         String[] playerlist = parser.parsePlayerlist(playerlistMessage);
 
-        assertEquals(playerlist.length, 2);
+        Assert.assertEquals(playerlist.length, 2);
 
-        assertEquals(playerlist[0], "test");
-        assertEquals(playerlist[1], "hoi");
+        Assert.assertEquals(playerlist[0], "test");
+        Assert.assertEquals(playerlist[1], "hoi");
     }
 
     @Test
@@ -33,11 +35,11 @@ public class ParserTest extends TestCase {
 
         String[] gamelist = parser.parseGamelist(gamelistMessage);
 
-        assertEquals(gamelist.length, 3);
+        Assert.assertEquals(gamelist.length, 3);
 
-        assertEquals(gamelist[0], "Ultra Guess Game");
-        assertEquals(gamelist[1], "Guess Game Deluxe");
-        assertEquals(gamelist[2], "Guess Game");
+        Assert.assertEquals(gamelist[0], "Ultra Guess Game");
+        Assert.assertEquals(gamelist[1], "Guess Game Deluxe");
+        Assert.assertEquals(gamelist[2], "Guess Game");
     }
 
     @Test
@@ -46,9 +48,9 @@ public class ParserTest extends TestCase {
 
         Challenge challenge = parser.parseChallengeRequest(challengeMessage);
 
-        assertEquals(challenge.getChallenger(), "test");
-        assertEquals(challenge.getGame(), "Ultra Guess Game");
-        assertEquals(challenge.getNumber(), 0);
+        Assert.assertEquals(challenge.getChallenger(), "test");
+        Assert.assertEquals(challenge.getGame(), "Ultra Guess Game");
+        Assert.assertEquals(challenge.getNumber(), 0);
     }
 
     @Test
@@ -57,9 +59,9 @@ public class ParserTest extends TestCase {
 
         Challenge challenge = parser.parseChallengeRequest(challengeMessage);
 
-        assertEquals(challenge.getChallenger(), "test\", GAMETYPE: \"Other Game");
-        assertEquals(challenge.getGame(), "Ultra Guess Game");
-        assertEquals(challenge.getNumber(), 0);
+        Assert.assertEquals(challenge.getChallenger(), "test\", GAMETYPE: \"Other Game");
+        Assert.assertEquals(challenge.getGame(), "Ultra Guess Game");
+        Assert.assertEquals(challenge.getNumber(), 0);
     }
 
     @Test
@@ -68,9 +70,9 @@ public class ParserTest extends TestCase {
 
         Move move = parser.parseMove(moveMessage);
 
-        assertEquals(move.getPlayer(), "test");
-        assertEquals(move.getDetails(), "Hoger");
-        assertEquals(move.getMove(), "3");
+        Assert.assertEquals(move.getPlayer(), "test");
+        Assert.assertEquals(move.getDetails(), "Hoger");
+        Assert.assertEquals(move.getMove(), "3");
     }
 
     @Test
@@ -79,8 +81,8 @@ public class ParserTest extends TestCase {
 
         Move move = parser.parseMove(moveMessage);
 
-        assertEquals(move.getPlayer(), "test\", MOVE: \"4");
-        assertEquals(move.getDetails(), "Hoger");
-        assertEquals(move.getMove(), "3");
+        Assert.assertEquals(move.getPlayer(), "test\", MOVE: \"4");
+        Assert.assertEquals(move.getDetails(), "Hoger");
+        Assert.assertEquals(move.getMove(), "3");
     }
 }
