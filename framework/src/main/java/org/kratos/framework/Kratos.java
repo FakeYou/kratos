@@ -50,6 +50,10 @@ public class Kratos {
         return player;
     }
 
+    public Match getMatch() {
+        return match;
+    }
+
     public JsonElement getSetting(String... keys) {
         return settings.get(keys);
     }
