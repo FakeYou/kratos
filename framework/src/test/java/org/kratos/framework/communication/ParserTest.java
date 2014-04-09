@@ -1,8 +1,7 @@
-package java.org.kratos.framework.communication;
+package org.kratos.framework.communication;
 
 import junit.framework.TestCase;
 import org.junit.Test;
-import org.kratos.framework.communication.Parser;
 import org.kratos.framework.game.events.Challenge;
 import org.kratos.framework.game.events.Move;
 
