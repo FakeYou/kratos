@@ -1,23 +1,41 @@
 package org.kratos.framework.game.events;
 
-import nl.hanze.t23i.gamemodule.extern.AbstractGameModule;
-import nl.hanze.t23i.gamemodule.game.GuessGame;
-import org.kratos.framework.Kratos;
-import org.kratos.framework.game.Player;
-
 /**
-* Created by FakeYou on 4/8/14.
-*/
+ * Created by FakeYou on 4/9/14.
+ */
 public class Match {
-    private AbstractGameModule gameModule;
 
-    public Match(Kratos kratos, String gameType, Player player, Player opponent) {
-        if(gameType == "Guess Game") {
-            gameModule = new GuessGame(player.getUsername(), opponent.getUsername());
-        }
+    private String gametype;
+    private String playerToMove;
+    private String opponent;
+
+    public Match(String gametype, String playerToMove, String opponent) {
+        this.gametype = gametype;
+        this.playerToMove = playerToMove;
+        this.opponent = opponent;
     }
 
-    public void start() {
-        gameModule.start();
+    public String getGametype() {
+        return gametype;
+    }
+
+    public void setGametype(String gametype) {
+        this.gametype = gametype;
+    }
+
+    public String getPlayerToMove() {
+        return playerToMove;
+    }
+
+    public void setPlayerToMove(String playerToMove) {
+        this.playerToMove = playerToMove;
+    }
+
+    public String getOpponent() {
+        return opponent;
+    }
+
+    public void setOpponent(String opponent) {
+        this.opponent = opponent;
     }
 }

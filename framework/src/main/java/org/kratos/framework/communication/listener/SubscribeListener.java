@@ -21,8 +21,6 @@ public class SubscribeListener extends AbstractListener {
         String OkPattern = "^(OK)$";
         String ErrUnkownGamePattern = "^(ERR Unknown game: \').+(\')$";
 
-        System.out.println("-" + message);
-
         if(message.matches(OkPattern)) {
             informListeners(Communication.status.OK, "subscribed");
             listening = false;

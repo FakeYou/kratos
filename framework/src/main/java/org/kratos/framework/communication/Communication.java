@@ -4,6 +4,7 @@ import org.kratos.framework.Kratos;
 import org.kratos.framework.communication.command.*;
 import org.kratos.framework.communication.listener.ChallengeRequestListener;
 import org.kratos.framework.communication.listener.ConnectListener;
+import org.kratos.framework.communication.listener.GameListener;
 import org.kratos.framework.communication.telnet.TelnetHandler;
 
 import java.io.IOException;
@@ -36,6 +37,7 @@ public class Communication implements Runnable {
         GAME_WIN,
         GAME_MATCH,
         GAME_YOUR_TURN,
+        CHALLENGE_CANCELLED,
         ERROR,
         ERROR_LOGIN_DUPLICATE_NAME,
         ERROR_LOGIN_ALREADY_LOGGED_IN,
@@ -43,6 +45,7 @@ public class Communication implements Runnable {
         ERROR_CHALLENGE_UNKNOWN_PLAYER,
         ERROR_CHALLENGE_UNKNOWN_GAME,
         ERROR_CHALLENGE_ILLEGAL_ARGUMENTS,
+        ERROR_CHALLENGE_INVALID_NUMBER,
         ERROR_GET_UNKNOWN_ARGUMENT,
         ERROR_SUBSCRIBE_UNKNOWN_GAME,
         ERROR_MOVE_NO_MOVE_ENTERED,
@@ -111,9 +114,17 @@ public class Communication implements Runnable {
         commands.put("challenge", challengeCommand);
         handler.addListener(challengeCommand.getListener());
 
+        ChallengeAcceptCommand challengeAcceptCommand = new ChallengeAcceptCommand(this);
+        commands.put("challengeAccept", challengeAcceptCommand);
+        handler.addListener(challengeAcceptCommand.getListener());
+
         SubscribeCommand subscribeCommand = new SubscribeCommand(this);
         commands.put("subscribe", subscribeCommand);
         handler.addListener(subscribeCommand.getListener());
+
+        MoveCommand moveCommand = new MoveCommand(this);
+        commands.put("move", moveCommand);
+        handler.addListener(moveCommand.getListener());
     }
 
     public void registerListeners() {
@@ -124,6 +135,10 @@ public class Communication implements Runnable {
         ConnectListener connectListener = new ConnectListener();
         listeners.put("connect", connectListener);
         handler.addListener(connectListener);
+
+        GameListener gameListener = new GameListener();
+        listeners.put("game", gameListener);
+        handler.addListener(gameListener);
     }
 
     public void connect(String host, int port) {

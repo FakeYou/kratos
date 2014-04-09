@@ -42,6 +42,7 @@ public class Login {
             public void trigger(Communication.status status, String response) {
                 if(status == Communication.status.OK) {
                     setErrorLabel(" ");
+                    kratos.setUsername(usernameField.getText());
                     app.setSelectedUsername(usernameField.getText());
                     app.openLobby();
                 }

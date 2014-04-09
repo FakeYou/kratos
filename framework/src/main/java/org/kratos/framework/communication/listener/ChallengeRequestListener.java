@@ -18,9 +18,14 @@ public class ChallengeRequestListener extends AbstractListener {
     @Override
     public resolved trigger(String message) {
         String ChallengePatten = "^(SVR GAME CHALLENGE \\{CHALLENGER: \").+(\", GAMETYPE: \")[a-zA-Z ]+(\", CHALLENGENUMBER: \")[0-9]+(\"\\})$";
+        String ChallengeCancelledPattern = "^(SVR GAME CHALLENGE CANCELLED \\{CHALLENGENUMBER: \")[0-9]+(\"\\})";
 
         if(message.matches(ChallengePatten)) {
             informListeners(Communication.status.OK, message);
+            return resolved.COMPLETE;
+        }
+        else if(message.matches(ChallengeCancelledPattern)) {
+            informListeners(Communication.status.CHALLENGE_CANCELLED, message);
             return resolved.COMPLETE;
         }
 

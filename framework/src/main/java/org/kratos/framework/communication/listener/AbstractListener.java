@@ -52,7 +52,7 @@ public abstract class AbstractListener implements CommunicationListener {
         ArrayList<CommandListener> listeners = (ArrayList<CommandListener>) this.listeners.clone();
 
         for(CommandListener listener : listeners) {
-            if(listener.active) {
+            if(listener != null && listener.active) {
                 listener.trigger(status, response);
             }
             else {

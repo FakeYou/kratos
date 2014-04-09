@@ -56,6 +56,7 @@ public class Lobby {
 
                 if(answer == JOptionPane.YES_OPTION) {
                     challenge.setAccepted(true);
+                    interpreter.challengeAccept(challenge.getNumber(), null);
                 }
                 else {
                     challenge.setAccepted(false);

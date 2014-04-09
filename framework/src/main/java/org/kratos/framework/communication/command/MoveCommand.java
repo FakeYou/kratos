@@ -2,6 +2,7 @@ package org.kratos.framework.communication.command;
 
 import org.kratos.framework.communication.Communication;
 import org.kratos.framework.communication.CommunicationListener;
+import org.kratos.framework.communication.listener.MoveListener;
 
 /**
  * Created by FakeYou on 4/8/14.
@@ -10,6 +11,7 @@ public class MoveCommand extends AbstractCommand {
 
     public MoveCommand(Communication communication) {
         super(communication);
+        listener = new MoveListener(this);
     }
 
     @Override

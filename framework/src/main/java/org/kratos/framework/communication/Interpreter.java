@@ -31,6 +31,14 @@ public class Interpreter {
         communication.command("challenge", listener, challengee, game);
     }
 
+    public void challengeAccept(int number, CommandListener listener) {
+        communication.command("challengeAccept", listener, String.valueOf(number));
+    }
+
+    public void move(String move, CommandListener listener) {
+        communication.command("move", listener, move);
+    }
+
     public void getPlayerlist(CommandListener listener) {
         communication.command("getPlayerlist", listener);
     }

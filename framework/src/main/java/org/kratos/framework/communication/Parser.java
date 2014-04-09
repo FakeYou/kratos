@@ -1,7 +1,7 @@
 package org.kratos.framework.communication;
 
-import org.kratos.framework.game.events.Challenge;
-import org.kratos.framework.game.events.Move;
+import org.apache.commons.lang3.StringUtils;
+import org.kratos.framework.game.events.*;
 
 /**
  * Created by FakeYou on 9-4-14.
@@ -92,5 +92,79 @@ public class Parser {
         move = message.replaceAll(moveBeginPattern, "").replaceAll(moveEndPattern, "");
 
         return new Move(username, details, move);
+    }
+
+    public Match parseMatch(String message) {
+        // SVR GAME MATCH {GAMETYPE: "Ultra Guess Game", PLAYERTOMOVE: "hoi", OPPONENT: "hoi"}
+
+        String gametype;
+        String gametypeBeginPattern = "^(SVR GAME MATCH \\{GAMETYPE: \")";
+        String gametypeEndPattern = "(\", PLAYERTOMOVE: \").+(\", OPPONENT: \").+(\"\\})$";
+
+        String playerToMove;
+        String playerToMoveBeginPattern = "^(SVR GAME MATCH \\{GAMETYPE: \").+(\", PLAYERTOMOVE: \")";
+        String playerToMoveEndPattern = "(\", OPPONENT: \").+(\"\\})$";
+
+        String opponent;
+        String opponentBeginPattern = "^(SVR GAME MATCH \\{GAMETYPE: \").+(\", PLAYERTOMOVE: \").+(\", OPPONENT: \")";
+        String opponentEndPattern = "(\"\\})$";
+
+
+        gametype = message.replaceAll(gametypeBeginPattern, "").replaceAll(gametypeEndPattern, "");
+        opponent = message.replaceAll(opponentBeginPattern, "").replaceAll(opponentEndPattern, "");
+
+        if(StringUtils.countMatches(message, opponent) == 2) {
+            playerToMove = opponent;
+        }
+        else {
+            playerToMove = message.replaceAll(playerToMoveBeginPattern, "").replaceAll(playerToMoveEndPattern, "");
+        }
+
+
+        return new Match(gametype, playerToMove, opponent);
+    }
+
+    public Win parseWin(String message) {
+        // SVR GAME WIN {COMMENT: "Turn timelimit reached", PLAYERONESCORE: "0", PLAYERTWOSCORE: "0"}
+
+        String comment;
+        String commentBeginPattern = "^(SVR GAME WIN \\{COMMENT: \")";
+        String commentEndPattern = "(\", PLAYERONESCORE: \")[0-9]+(\", PLAYERTWOSCORE: \")[0-9]+(\"\\})$";
+
+        String playerOneScore;
+        String playerOneScoreBeginPattern = "^(SVR GAME WIN \\{COMMENT: \").+(\", PLAYERONESCORE: \")";
+        String playerOneScoreEndPattern = "(\", PLAYERTWOSCORE: \")[0-9]+(\"\\})$";
+
+        String playerTwoScore;
+        String playerTwoScoreBeginPattern = "^(SVR GAME WIN \\{COMMENT: \").+(\", PLAYERONESCORE: \")[0-9]+(\", PLAYERTWOSCORE: \")";
+        String playerTwoScoreEndPattern = "(\"\\})$";
+
+        comment = message.replaceAll(commentBeginPattern, "").replaceAll(commentEndPattern, "");
+        playerOneScore = message.replaceAll(playerOneScoreBeginPattern, "").replaceAll(playerOneScoreEndPattern, "");
+        playerTwoScore = message.replaceAll(playerTwoScoreBeginPattern, "").replaceAll(playerTwoScoreEndPattern, "");
+
+        return new Win(comment, Integer.parseInt(playerOneScore), Integer.parseInt(playerTwoScore));
+    }
+
+    public Loss parseLoss(String message) {
+        // SVR GAME LOSS {COMMENT: "Turn timelimit reached", PLAYERONESCORE: "0", PLAYERTWOSCORE: "0"}
+
+        String comment;
+        String commentBeginPattern = "^(SVR GAME LOSS \\{COMMENT: \")";
+        String commentEndPattern = "(\", PLAYERONESCORE: \")[0-9]+(\", PLAYERTWOSCORE: \")[0-9]+(\"\\})$";
+
+        String playerOneScore;
+        String playerOneScoreBeginPattern = "^(SVR GAME LOSS \\{COMMENT: \").+(\", PLAYERONESCORE: \")";
+        String playerOneScoreEndPattern = "(\", PLAYERTWOSCORE: \")[0-9]+(\"\\})$";
+
+        String playerTwoScore;
+        String playerTwoScoreBeginPattern = "^(SVR GAME LOSS \\{COMMENT: \").+(\", PLAYERONESCORE: \")[0-9]+(\", PLAYERTWOSCORE: \")";
+        String playerTwoScoreEndPattern = "(\"\\})$";
+
+        comment = message.replaceAll(commentBeginPattern, "").replaceAll(commentEndPattern, "");
+        playerOneScore = message.replaceAll(playerOneScoreBeginPattern, "").replaceAll(playerOneScoreEndPattern, "");
+        playerTwoScore = message.replaceAll(playerTwoScoreBeginPattern, "").replaceAll(playerTwoScoreEndPattern, "");
+
+        return new Loss(comment, Integer.parseInt(playerOneScore), Integer.parseInt(playerTwoScore));
     }
 }
