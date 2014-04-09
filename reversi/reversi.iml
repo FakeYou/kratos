@@ -49,6 +49,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.8.2" level="project" />
     <orderEntry type="module-library">
       <library name="Maven: nl.hanze.t23i:gamemodule:1.0">
         <CLASSES>
@@ -58,7 +59,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.8.2" level="project" />
   </component>
 </module>
 

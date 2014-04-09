@@ -43,7 +43,7 @@
             <artifactId>extern</artifactId>
             <version>1.0</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/gamemodule-1.0.jar</systemPath>
+            <systemPath>${basedir}/lib/gamemodule-1.0.jar</systemPath>
         </dependency>
 
         <dependency>
@@ -51,7 +51,7 @@
             <artifactId>guessGame</artifactId>
             <version>1.0</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/GuessGame-1.0.jar</systemPath>
+            <systemPath>${basedir}/lib/GuessGame-1.0.jar</systemPath>
         </dependency>
 
         <dependency>
@@ -59,7 +59,7 @@
             <artifactId>guessGameDeluxe</artifactId>
             <version>1.0</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/GuessGameDeluxe-1.0.jar</systemPath>
+            <systemPath>${basedir}/lib/GuessGameDeluxe-1.0.jar</systemPath>
         </dependency>
 
         <dependency>
@@ -67,7 +67,7 @@
             <artifactId>ultraGuessGame</artifactId>
             <version>1.0</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/UltraGuessGame-1.0.jar</systemPath>
+            <systemPath>${basedir}/lib/UltraGuessGame-1.0.jar</systemPath>
         </dependency>
     </dependencies>
 
