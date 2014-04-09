@@ -19,7 +19,7 @@ public class MoveListener extends AbstractListener {
         String ErrNoMoveEntered = "^(ERR No move entered)$";
 
         if(message.matches(OkPattern)) {
-            informListeners(Communication.status.OK, "logged in");
+            informListeners(Communication.status.OK, "move set");
             listening = false;
             return resolved.COMPLETE;
         }
