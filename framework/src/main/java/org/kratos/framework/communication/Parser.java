@@ -1,6 +1,7 @@
 package org.kratos.framework.communication;
 
-import org.kratos.framework.game.Challenge;
+import org.kratos.framework.game.events.Challenge;
+import org.kratos.framework.game.events.Move;
 
 /**
  * Created by FakeYou on 9-4-14.
@@ -64,8 +65,32 @@ public class Parser {
         gametype = request.replaceAll(gametypeBeginPattern, "").replaceAll(gametypeEndPattern, "");
         challengenumber = request.replaceAll(challengenumberBeginPattern, "").replaceAll(challengenumberEndPattern, "");
 
-        System.out.println(username + ", " + gametype + ", " + challengenumber);
-
         return new Challenge(username, gametype, Integer.parseInt(challengenumber));
+    }
+
+    public Move parseMove(String message) {
+        // SVR GAME MOVE {PLAYER: "test", DETAILS: "Hoger", MOVE: "3"}
+
+        String username = message;
+        String usernameBeginPattern = "^(SVR GAME MOVE \\{PLAYER: \")";
+        String usernameEndPattern = "(\", DETAILS: \").+(\", MOVE: \").+(\"\\})";
+
+        String details;
+        String detailsBeginPattern = "^(\\{DETAILS: \")";
+        String detailsEndPattern = "(\", MOVE: \").+(\"\\})";
+
+        String move;
+        String moveBeginPattern = "^(\\{DETAILS: \").+(\", MOVE: \")";
+        String moveEndPattern = "(\"\\})$";
+
+        username = username.replaceAll(usernameBeginPattern, "").replaceAll(usernameEndPattern, "");
+
+        message = message.replaceAll(usernameBeginPattern, "").replaceFirst(username, "").replaceFirst("\", ", "");
+        message = "{" + message;
+
+        details = message.replaceAll(detailsBeginPattern, "").replaceAll(detailsEndPattern, "");
+        move = message.replaceAll(moveBeginPattern, "").replaceAll(moveEndPattern, "");
+
+        return new Move(username, details, move);
     }
 }
