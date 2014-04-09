@@ -5,8 +5,8 @@ import nl.hanze.t23i.gamemodule.game.GuessGame;
 import org.kratos.framework.Kratos;
 
 /**
- * Created by FakeYou on 4/8/14.
- */
+* Created by FakeYou on 4/8/14.
+*/
 public class Match {
     private AbstractGameModule gameModule;
 

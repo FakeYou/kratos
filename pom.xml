@@ -29,12 +29,6 @@
                 </configuration>
             </plugin>
         </plugins>
-
-        <resources>
-            <resource>
-                <directory>framework/src/main/resources</directory>
-            </resource>
-        </resources>
     </build>
 
     <dependencies>
@@ -52,7 +46,7 @@
             <artifactId>gamemodule</artifactId>
             <version>1.0</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/framework/lib/GuessGame.jar</systemPath>
+            <systemPath>${project.basedir}/framework/lib/GuessGame-1.0.jar</systemPath>
         </dependency>
 
         <dependency>
@@ -60,7 +54,7 @@
             <artifactId>gamemodule</artifactId>
             <version>1.0</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/framework/lib/GuessGameDeluxe.jar</systemPath>
+            <systemPath>${project.basedir}/framework/lib/GuessGameDeluxe-1.0.jar</systemPath>
         </dependency>
 
         <dependency>
@@ -68,7 +62,7 @@
             <artifactId>gamemodule</artifactId>
             <version>1.0</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/framework/lib/UltraGuessGame.jar</systemPath>
+            <systemPath>${project.basedir}/framework/lib/UltraGuessGame-1.0.jar</systemPath>
         </dependency>
 
     </dependencies>
