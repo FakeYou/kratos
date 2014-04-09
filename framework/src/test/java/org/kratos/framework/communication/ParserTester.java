@@ -9,7 +9,7 @@ import org.kratos.framework.game.events.Move;
 /**
  * Created by FakeYou on 4/9/14.
  */
-public class ParserTest {
+public class ParserTester {
     private Parser parser;
 
     @Before
