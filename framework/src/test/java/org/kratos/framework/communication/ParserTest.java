@@ -1,12 +1,10 @@
-package main.java.org.kratos.framework.communication;
+package java.org.kratos.framework.communication;
 
 import junit.framework.TestCase;
 import org.junit.Test;
 import org.kratos.framework.communication.Parser;
 import org.kratos.framework.game.events.Challenge;
 import org.kratos.framework.game.events.Move;
-
-import java.util.ArrayList;
 
 /**
  * Created by FakeYou on 4/9/14.
