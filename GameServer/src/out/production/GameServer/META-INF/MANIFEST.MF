@@ -1,3 +1,3 @@
 Manifest-Version: 1.0
-Main-Class: nl.hanze.gameserver.app.Application
+Main-Class: nl.hanze.gameserver.guessGame.Application
 

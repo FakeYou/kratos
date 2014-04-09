@@ -12,6 +12,8 @@ import org.kratos.framework.communication.Parser;
 import org.kratos.framework.game.Player;
 import org.kratos.framework.game.events.Move;
 
+import java.util.ArrayList;
+
 /**
 * Created by FakeYou on 4/8/14.
 */
@@ -32,6 +34,8 @@ public class Match {
     private Player opponent;
     private States state;
 
+    private ArrayList<Move> moves;
+
     private AbstractGameModule gameModule;
 
     public Match(Kratos kratos, Player player) {
@@ -41,6 +45,8 @@ public class Match {
         this.player = kratos.getPlayer();
 
         state = States.SETUP;
+
+        moves = new ArrayList<Move>();
 
         kratos.getCommunication().getCommunicationListener("game").addListener(new CommandListener() {
             @Override
@@ -54,6 +60,7 @@ public class Match {
                 }
                 else if(status == Communication.status.GAME_MOVE) {
                     Move move = parser.parseMove(response);
+                    moves.add(move);
 
                     gameModule.doPlayerMove(move.getPlayer(), move.getMove());
                 }
@@ -67,15 +74,12 @@ public class Match {
                 }
                 else if(status == Communication.status.GAME_YOUR_TURN) {
                     state = States.PLAYER_TURN;
-
-                    int move = (int) Math.round(Math.random() * 10);
-                    doMove(move + "");
                 }
             }
         });
     }
 
-    public States getStatus() {
+    public States getState() {
         return state;
     }
 
@@ -112,6 +116,19 @@ public class Match {
     public void doMove(String move) {
         if(state == States.PLAYER_TURN) {
             interpreter.move(move, null);
+            state = States.OPPONENT_TURN;
         }
+    }
+
+    public ArrayList<Move> getMoves() {
+        return moves;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public Player getOpponent() {
+        return opponent;
     }
 }

@@ -6,6 +6,7 @@ import org.kratos.framework.communication.Communication;
 import org.kratos.framework.communication.Interpreter;
 import org.kratos.framework.communication.Parser;
 import org.kratos.framework.game.events.Challenge;
+import org.kratos.guess.GuessGame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -60,6 +61,15 @@ public class Lobby {
                 }
                 else {
                     challenge.setAccepted(false);
+                }
+            }
+        });
+
+        kratos.getCommunication().getCommunicationListener("game").addListener(new CommandListener() {
+            @Override
+            public void trigger(Communication.status status, String response) {
+                if(status == Communication.status.GAME_MATCH) {
+                    new GuessGame(kratos).setVisible(true);
                 }
             }
         });
