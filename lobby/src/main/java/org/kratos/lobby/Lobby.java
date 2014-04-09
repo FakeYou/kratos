@@ -4,6 +4,7 @@ import org.kratos.framework.Kratos;
 import org.kratos.framework.communication.CommandListener;
 import org.kratos.framework.communication.Communication;
 import org.kratos.framework.communication.Interpreter;
+import org.kratos.framework.communication.Parser;
 import org.kratos.framework.game.Challenge;
 
 import javax.swing.*;
@@ -27,6 +28,7 @@ public class Lobby {
 
     private Kratos kratos;
     private Interpreter interpreter;
+    private Parser parser;
     private App app;
 
     private CommandListener gamelistListener;
@@ -37,6 +39,7 @@ public class Lobby {
         this.app = app;
         this.kratos = kratos;
         this.interpreter = kratos.getInterpreter();
+        this.parser = kratos.getParser();
 
         BoxLayout box = new BoxLayout(playerlistPanel, BoxLayout.PAGE_AXIS);
         playerlistPanel.setLayout(box);
@@ -44,7 +47,7 @@ public class Lobby {
         kratos.getCommunication().getCommunicationListener("challengeRequest").addListener(new CommandListener() {
             @Override
             public void trigger(Communication.status status, String response) {
-                Challenge challenge = interpreter.parseChallengeRequest(response);
+                Challenge challenge = parser.parseChallengeRequest(response);
 
                 String message = "You have been challenged by " + challenge.getChallenger() + " to play " + challenge.getGame() + ".\n\r" +
                         "Do you wish to accept the challenge?";
@@ -115,7 +118,7 @@ public class Lobby {
             gamelistListener =  new CommandListener() {
                 @Override
                 public void trigger(Communication.status status, String response) {
-                    String[] gamelist = interpreter.parseGamelist(response);
+                    String[] gamelist = parser.parseGamelist(response);
 
                     app.setSelectedGame(gamelist[0]);
 
@@ -137,7 +140,7 @@ public class Lobby {
             playerlistListener = new CommandListener() {
                 @Override
                 public void trigger(Communication.status status, String response) {
-                    String[] playerlist = interpreter.parsePlayerlist(response);
+                    String[] playerlist = parser.parsePlayerlist(response);
 
                     for(int i = 0; i < playerlist.length; i++) {
                         String player = playerlist[i];

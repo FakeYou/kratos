@@ -69,6 +69,11 @@ public class TelnetReader implements Runnable {
                     }
                 }
             }
+
+            try {
+                Thread.sleep(50);
+            }
+            catch(InterruptedException e) { }
         }
     }
 

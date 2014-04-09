@@ -82,6 +82,12 @@ public class Communication implements Runnable {
                     e.printStackTrace();
                 }
             }
+            else {
+                try {
+                    Thread.sleep(50);
+                }
+                catch(InterruptedException e) { }
+            }
         }
     }
 

@@ -3,6 +3,7 @@ package org.kratos.framework;
 import com.google.gson.JsonElement;
 import org.kratos.framework.communication.Communication;
 import org.kratos.framework.communication.Interpreter;
+import org.kratos.framework.communication.Parser;
 import org.kratos.framework.utils.Settings;
 
 /**
@@ -13,6 +14,7 @@ public class Kratos {
 
     private Communication communication;
     private Interpreter interpreter;
+    private Parser parser;
 
     private Thread communicationThread;
 
@@ -23,6 +25,7 @@ public class Kratos {
         communication = new Communication(this);
 
         interpreter = new Interpreter(communication);
+        parser = new Parser();
 
         communicationThread = new Thread(communication);
         communicationThread.start();
@@ -39,6 +42,8 @@ public class Kratos {
     public Interpreter getInterpreter() {
         return interpreter;
     }
+
+    public Parser getParser() { return parser; }
 
     public static void main(String[] args) {
         new Kratos();

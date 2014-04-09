@@ -26,6 +26,11 @@ public class TelnetWriter implements Runnable {
     public void run() {
         while(true) {
             // nothing
+
+            try {
+                Thread.sleep(50);
+            }
+            catch(InterruptedException e) { }
         }
     }
 
