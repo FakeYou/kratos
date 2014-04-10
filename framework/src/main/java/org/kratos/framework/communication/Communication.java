@@ -35,6 +35,7 @@ public class Communication implements Runnable {
         GAME_MOVE,
         GAME_LOSS,
         GAME_WIN,
+        GAME_DRAW,
         GAME_MATCH,
         GAME_YOUR_TURN,
         CHALLENGE_CANCELLED,

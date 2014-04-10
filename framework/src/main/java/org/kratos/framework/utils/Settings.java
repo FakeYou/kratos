@@ -17,19 +17,16 @@ public class Settings {
     }
 
     public void loadSettingsFile(String path) {
+        JsonParser parser = new JsonParser();
+
         try {
             File file = new File(path);
             String fileContent = FileUtils.readFileToString(file);
 
-            JsonParser parser = new JsonParser();
-
             root = parser.parse(fileContent).getAsJsonObject();
         }
-        catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
+        catch (Exception e) {
+            root = parser.parse("{ host: \"localhost\", port: 7789 }").getAsJsonObject();
         }
     }
 

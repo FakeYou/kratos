@@ -1,5 +1,6 @@
 package org.kratos.framework.game;
 
+import gamemodule.game.TicTacToe;
 import nl.hanze.t23i.gamemodule.extern.AbstractGameModule;
 import nl.hanze.t23i.gamemodule.game.GuessGame;
 import nl.hanze.t23i.gamemodule.game.GuessGameDeluxe;
@@ -23,6 +24,7 @@ public class Match {
         SETUP,
         WIN,
         LOSS,
+        DRAW,
         PLAYER_TURN,
         OPPONENT_TURN
     }
@@ -72,6 +74,10 @@ public class Match {
                     state = States.LOSS;
                     System.out.println("###### LOSS ######");
                 }
+                else if(status == Communication.status.GAME_DRAW) {
+                    state = States.DRAW;
+                    System.out.println("###### DRAW ######");
+                }
                 else if(status == Communication.status.GAME_YOUR_TURN) {
                     state = States.PLAYER_TURN;
                 }
@@ -106,6 +112,9 @@ public class Match {
         }
         else if(gametype.equals("Guess Game Deluxe")) {
             gameModule = new GuessGameDeluxe(startingPlayername, secondPlayername);
+        }
+        else if(gametype.equals("Tic Tac Toe")) {
+            gameModule = new TicTacToe(startingPlayername, secondPlayername);
         }
 
         System.out.println("starting: " + startingPlayername + " - second: " + secondPlayername);

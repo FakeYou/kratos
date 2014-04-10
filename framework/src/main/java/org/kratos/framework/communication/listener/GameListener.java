@@ -17,6 +17,7 @@ public class GameListener extends AbstractListener {
         String GameMovePattern = "^(SVR GAME MOVE \\{PLAYER: \").+(\", DETAILS: \").+(\", MOVE: \").+(\"\\})$";
         String GameLossPattern = "^(SVR GAME LOSS \\{COMMENT: \").+(\", PLAYERONESCORE: \").+(\", PLAYERTWOSCORE: \").+(\"\\})$";
         String GameWinPattern = "^(SVR GAME WIN \\{COMMENT: \").+(\", PLAYERONESCORE: \").+(\", PLAYERTWOSCORE: \").+(\"\\})$";
+        String GameDrawPattern = "^(SVR GAME DRAW \\{COMMENT: \").+(\", PLAYERONESCORE: \").+(\", PLAYERTWOSCORE: \").+(\"\\})$";
         String GameMatchPattern = "^(SVR GAME MATCH \\{GAMETYPE: \").+(\", PLAYERTOMOVE: \").+(\", OPPONENT: \").+(\"\\})$";
         String GameYourTurnPattern = "^(SVR GAME YOURTURN \\{TURNMESSAGE: \").+(\"\\})$";
 
@@ -30,6 +31,10 @@ public class GameListener extends AbstractListener {
         }
         else if(message.matches(GameWinPattern)) {
             informListeners(Communication.status.GAME_WIN, message);
+            return resolved.COMPLETE;
+        }
+        else if(message.matches(GameDrawPattern)) {
+            informListeners(Communication.status.GAME_DRAW, message);
             return resolved.COMPLETE;
         }
         else if(message.matches(GameMatchPattern)) {

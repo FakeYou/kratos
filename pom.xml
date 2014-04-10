@@ -15,6 +15,7 @@
         <module>guess</module>
         <module>reversi</module>
         <module>tictactoe</module>
+        <module>ai</module>
     </modules>
 
     <build>

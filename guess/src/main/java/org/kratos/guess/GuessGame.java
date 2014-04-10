@@ -25,7 +25,7 @@ public class GuessGame {
 
         guessFrame = new JFrame("Guess Game - kratos");
 
-        guessFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        guessFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         guessFrame.getContentPane().add(guess.getPanel());
         guessFrame.pack();
         guessFrame.setLocationRelativeTo(null);
