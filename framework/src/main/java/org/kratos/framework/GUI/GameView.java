@@ -1,5 +1,8 @@
 package org.kratos.framework.GUI;
 
+import org.kratos.tictactoe.*;
+import org.kratos.framework.game.Match;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,6 +15,9 @@ public class GameView extends JFrame {
 
     public static final int TIC_TAC_TOE = 0;
     public static final int REVERSI = 1;
+
+    public static final int USER = 0;
+    public static final int OPPONENT = 2;
 
     private JLabel topText;
     private JButton forfeit;
@@ -35,18 +41,27 @@ public class GameView extends JFrame {
 
     private Timer timer;
 
-    public GameView(int game, String player1Name, String player2Name, int startingPlayer){
+    private Match match;
+
+    private TicTacToe ttt;
+
+    public GameView(int game, String player1Name, String player2Name, Match match, TicTacToe ttt){
         this.player1Name = player1Name;
         this.player2Name = player2Name;
-        currentPlayer = startingPlayer;
+        this.match = match;
+        this.ttt = ttt;
+
         initTurnTimer();
         init(game);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setPreferredSize(new Dimension(700, 700));
+        this.pack();
+        this.setVisible(true);
     }
 
     /**
      * Initialize view
-      */
+     */
     public void init(int game){
         // Depending on which game was requested, create an appropriate playing board.
         switch(game) {
@@ -135,6 +150,14 @@ public class GameView extends JFrame {
         player1NameLabel.setText(name);
     }
 
+    public String getPlayerOneName(){
+        return player1Name;
+    }
+
+    public String getPlayerTwoName(){
+        return player2Name;
+    }
+
     /**
      * Change or set player two's name (should be done in constructor)
      * @param name
@@ -149,39 +172,38 @@ public class GameView extends JFrame {
      * @param player 1 for player one, 2 for player two
      */
     public void setTurn(int player){
+        if(player != currentPlayer){
+            time = 10;
+            timer.restart();
+
+            JLabel opponentsTurnTime = (currentPlayer == 1) ? turnTimePlayer1 : turnTimePlayer2;
+            opponentsTurnTime.setText("Opponent's turn...");
+        }
         currentPlayer = player;
-    }
-
-    /**
-     * Swap the turn (called when a move has been made or timer reaches 0)
-     */
-    public void swapTurn(){
-        time = 10;
-        currentPlayer = currentPlayer == 2 ? 1 : 2;
-
-        JLabel turnTimer = currentPlayer == 1 ? turnTimePlayer1 : turnTimePlayer2;
-        turnTimer.setText(time > 9 ? "0:10" : "0:0" + time);
-
-        JLabel opponentsTurnTime = (currentPlayer == 1) ? turnTimePlayer2 : turnTimePlayer1;
-        opponentsTurnTime.setText("Opponent's turn...");
     }
 
     /**
      * Instantiate and start turn timer.
      */
     public void initTurnTimer(){
-            timer = new Timer(1000, new ActionListener(){
-                public void actionPerformed(ActionEvent e){
-                    time = time == 11 ? time -= 1 : time;
-                    time -= 1;
-                    if(time == -1){
-                        swapTurn();
-                    }
+        timer = new Timer(1000, new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                time = time == 11 ? time -= 1 : time;
+                time -= 1;
+                if(time <= 0){
+                    time = 0;
+                }
 
-                    JLabel turnTimer = currentPlayer == 1 ? turnTimePlayer1 : turnTimePlayer2;
-                    turnTimer.setText(time > 9 ? "0:10" : "0:0" + time);
-                }});
-            timer.start();
+                JLabel turnTimer = currentPlayer == 1 ? turnTimePlayer1 : turnTimePlayer2;
+                turnTimer.setText(time > 9 ? "0:10" : "0:0" + time);
+            }});
+        timer.start();
+    }
+
+    public void resetTimer(){
+        timer.stop();
+        time = 10;
+        timer.start();
     }
 
     /**
@@ -190,6 +212,32 @@ public class GameView extends JFrame {
      */
     public Boolean ableToMakeMove(){
         return currentPlayer == 1 ? true : false;
+    }
+
+    public void makeMove(int col, int row, int player){
+        board.registerMoveColRow(col, row, player);
+    }
+
+    public void sendMove(int col, int row){
+        match.doMove(col + "," + row);
+        ttt.incrementAmountOfExecutedMoves();
+    }
+
+    public void endGame(int winLossDraw){
+        switch(winLossDraw){
+            case 0:
+                timer.stop();
+                // Popup win
+                break;
+            case 1:
+                timer.stop();
+                // Popup loss
+                break;
+            case 2:
+                timer.stop();
+                // Popup draw
+                break;
+        }
     }
 }
 

@@ -34,9 +34,9 @@ public class GameBoard extends JPanel{
     }
 
     /**
-     * Register a move into the variable (does not perform any painting operations yet)
-     * @param row Row of the move
-     * @param col Column of the move
+     * Register a move into the variable (does not perform any painting operations yet) ONLY GETS CALLED FROM GUI
+     * @param x x of the move
+     * @param y y of the move
      * @param player Player that made the move
      */
     public void registerMove(int x, int y, int player){
@@ -50,9 +50,13 @@ public class GameBoard extends JPanel{
             System.out.println("Move already made on this square");
             return;
         }
+        registerMoveColRow(col, row, player);
+        view.sendMove(col, row);
+    }
+
+    public void registerMoveColRow(int col, int row, int player){
         this.gameState[row][col] = player;
         paintAllMoves(this.getGraphics());
-        view.swapTurn();
     }
 
     @Override
