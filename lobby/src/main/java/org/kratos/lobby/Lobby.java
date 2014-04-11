@@ -6,6 +6,7 @@ import org.kratos.framework.communication.Communication;
 import org.kratos.framework.communication.Interpreter;
 import org.kratos.framework.communication.Parser;
 import org.kratos.framework.game.events.Challenge;
+import org.kratos.framework.game.events.Match;
 import org.kratos.guess.GuessGame;
 
 import javax.swing.*;
@@ -69,7 +70,12 @@ public class Lobby {
             @Override
             public void trigger(Communication.status status, String response) {
                 if(status == Communication.status.GAME_MATCH) {
-                    new GuessGame(kratos).setVisible(true);
+                    Match match = parser.parseMatch(response);
+
+                    if(match.getGametype().equals("Tic Tac Toe")) {
+//                        new (kratos).setVisible(true);
+
+                    }
                 }
             }
         });
