@@ -68,7 +68,6 @@ public class View {
         gameListener = new CommandListener() {
             @Override
             public void trigger(Communication.status status, String response) {
-                refresh();
                 JFrame frame = (JFrame) SwingUtilities.getRoot(panel);
 
                 if (status == Communication.status.GAME_MOVE) {
