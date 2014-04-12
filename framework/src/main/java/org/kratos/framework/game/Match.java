@@ -1,5 +1,6 @@
 package org.kratos.framework.game;
 
+import gamemodule.game.Othello;
 import gamemodule.game.TicTacToe;
 import nl.hanze.t23i.gamemodule.extern.AbstractGameModule;
 import nl.hanze.t23i.gamemodule.game.GuessGame;
@@ -99,8 +100,6 @@ public class Match {
         String startingPlayername;
         String secondPlayername;
 
-        System.out.println("playertomove: " + playerToMove + ", username: " + player.getUsername());
-
         if(playerToMove.equals(player.getUsername())) {
             startingPlayername = player.getUsername();
             secondPlayername = opponent.getUsername();
@@ -126,8 +125,9 @@ public class Match {
         else if(gametype.equals("Tic Tac Toe")) {
             gameModule = new TicTacToe(startingPlayername, secondPlayername);
         }
-
-        System.out.println("starting: " + startingPlayername + " - second: " + secondPlayername);
+        else if(gametype.equals("Reversi")) {
+            gameModule = new Othello(startingPlayername, secondPlayername);
+        }
 
         gameModule.start();
     }
@@ -163,5 +163,9 @@ public class Match {
 
     public String getGametype() {
         return gametype;
+    }
+
+    public void setOpponent(Player opponent) {
+        this.opponent = opponent;
     }
 }

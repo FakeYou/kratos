@@ -21,6 +21,8 @@ public class TicTacToe {
     private Player player;
     private Player opponent;
 
+    private CommandListener gameListener;
+
     private Board board;
 
     public TicTacToe(Kratos kratos) {
@@ -38,8 +40,12 @@ public class TicTacToe {
         registerGameListener();
     }
 
+    public void unregisterGameListener() {
+        kratos.getCommunication().getCommunicationListener("game").removeListener(gameListener);
+    }
+
     public void registerGameListener() {
-        kratos.getCommunication().getCommunicationListener("game").addListener(new CommandListener() {
+        gameListener = new CommandListener() {
             @Override
             public void trigger(Communication.status status, String response) {
                 if(status == Communication.status.GAME_MOVE) {
@@ -59,12 +65,19 @@ public class TicTacToe {
                 else if(status == Communication.status.GAME_YOUR_TURN) {
                 }
             }
-        });
+        };
+
+        kratos.getCommunication().getCommunicationListener("game").addListener(gameListener);
     }
 
-    public void doMove(int x, int y) {
-        // todo - check if move is valid
-        interpreter.move(x + "," + y, null);
+    public Boolean doMove(int x, int y) {
+        if(board.getSquare(x, y) != Board.Square.EMPTY) {
+            return false;
+        }
+        else {
+            interpreter.move(x + "," + y, null);
+            return true;
+        }
     }
 
     public Board getBoard() {

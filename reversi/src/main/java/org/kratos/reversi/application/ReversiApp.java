@@ -1,7 +1,7 @@
-package org.kratos.tictactoe.application;
+package org.kratos.reversi.application;
 
 import org.kratos.framework.Kratos;
-import org.kratos.tictactoe.TicTacToe;
+import org.kratos.reversi.Reversi;
 
 import javax.swing.*;
 import java.awt.event.WindowEvent;
@@ -10,17 +10,17 @@ import java.awt.event.WindowListener;
 /**
  * Created by FakeYou on 4/12/14.
  */
-public class TicTacToeApp {
+public class ReversiApp {
     private Kratos kratos;
-    private TicTacToe ticTacToe;
+    private Reversi reversi;
     private View view;
 
-    public TicTacToeApp(Kratos kratos, JFrame lobbyFrame) {
+    public ReversiApp(Kratos kratos, JFrame lobbyFrame) {
         this.kratos = kratos;
-        this.ticTacToe = new TicTacToe(kratos);
-        this.view = new View(kratos, ticTacToe);
+        this.reversi = new Reversi(kratos);
+        this.view = new View(kratos, reversi);
 
-        JFrame frame = new JFrame("Tic Tac Toe - Kratos");
+        JFrame frame = new JFrame("Reversi - Kratos");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.getContentPane().add(view.getPanel());
         frame.pack();
@@ -31,10 +31,14 @@ public class TicTacToeApp {
             @Override
             public void windowClosing(WindowEvent e) {
                 view.unregisterGameListener();
-                ticTacToe.unregisterGameListener();
+                reversi.unregisterGameListener();
             }
 
-            public void windowOpened(WindowEvent e) {}
+            @Override
+            public void windowOpened(WindowEvent e) {
+                view.refresh();
+            }
+
             public void windowClosed(WindowEvent e) {}
             public void windowIconified(WindowEvent e) {}
             public void windowDeiconified(WindowEvent e) {}

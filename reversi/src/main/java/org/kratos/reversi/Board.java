@@ -1,13 +1,12 @@
-package org.kratos.tictactoe;
+package org.kratos.reversi;
 
 import org.kratos.framework.Kratos;
 
 import java.awt.event.ActionListener;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
- * Created by FakeYou on 4/11/14.
+ * Created by FakeYou on 4/12/14.
  */
 public class Board {
     private Kratos kratos;
@@ -20,24 +19,24 @@ public class Board {
     private ArrayList<ActionListener> listeners;
 
     public enum Square {
-        NOUGHT,
-        CROSS,
+        BLACK,
+        WHITE,
         EMPTY
-    };
+    }
 
     public Board(Kratos kratos) {
         this.kratos = kratos;
 
-        board = new Square[3][3];
+        board = new Square[8][8];
         listeners = new ArrayList<ActionListener>();
 
         if(kratos.getMatch().getPlayerToStart() == kratos.getMatch().getPlayer()) {
-            playerSquare = Square.NOUGHT;
-            opponentSquare = Square.CROSS;
+            playerSquare = Square.BLACK;
+            opponentSquare = Square.WHITE;
         }
         else {
-            playerSquare = Square.CROSS;
-            opponentSquare = Square.NOUGHT;
+            playerSquare = Square.WHITE;
+            opponentSquare = Square.BLACK;
         }
     }
 
@@ -56,6 +55,10 @@ public class Board {
     }
 
     public Square getSquare(int x, int y) {
+        if(x < 0 || y < 0 || x >= board[0].length || y >= board.length) {
+            return null;
+        }
+
         return board[y][x];
     }
 
@@ -79,5 +82,27 @@ public class Board {
 
     public void removeListener(ActionListener listener) {
         listeners.remove(listener);
+    }
+
+    public void debug() {
+        System.out.println("---------");
+
+        for(int y = 0; y < board.length; y++) {
+            for(int x = 0; x < board[y].length; x++) {
+                char c = ' ';
+
+                if(board[y][x] == Square.BLACK) {
+                    c = 'B';
+                }
+                else if(board[y][x] == Square.WHITE) {
+                    c = 'W';
+                }
+
+                System.out.print(c);
+            }
+            System.out.println();
+        }
+
+        System.out.println("---------");
     }
 }

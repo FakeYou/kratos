@@ -8,9 +8,8 @@ import org.kratos.framework.communication.Parser;
 import org.kratos.framework.game.events.Challenge;
 import org.kratos.framework.game.events.Match;
 import org.kratos.guess.GuessGame;
-import org.kratos.reversi.Reversi;
+import org.kratos.reversi.application.ReversiApp;
 import org.kratos.tictactoe.application.TicTacToeApp;
-//import org.kratos.tictactoe._TicTacToe;
 
 import javax.swing.*;
 import java.awt.*;
@@ -80,7 +79,7 @@ public class Lobby {
                     if(gametype.equals("Tic Tac Toe")){
                         new TicTacToeApp(kratos, app.getLobbyFrame());
                     } else if (gametype.equals("Reversi")){
-                        new Reversi(kratos);
+                        new ReversiApp(kratos, app.getLobbyFrame());
                     } else if (gametype.equals("GuessGame")){
                         new GuessGame(kratos).setVisible(true);
                     }
