@@ -1,6 +1,7 @@
 package org.kratos.lobby;
 
 import org.kratos.framework.Kratos;
+import org.kratos.tictactoe.application.TicTacToeApp;
 
 import javax.swing.*;
 import java.awt.*;
@@ -44,7 +45,7 @@ public class App {
         lobbyFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         lobbyFrame.getContentPane().add(lobby.getPanel());
         lobbyFrame.pack();
-        lobbyFrame.setLocationRelativeTo(null);
+        lobbyFrame.setLocationRelativeTo(loginFrame);
         lobbyFrame.setMinimumSize(new Dimension(700, 400));
         lobbyFrame.setVisible(false);
     }

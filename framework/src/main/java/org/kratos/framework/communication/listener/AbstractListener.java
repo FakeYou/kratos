@@ -44,6 +44,7 @@ public abstract class AbstractListener implements CommunicationListener {
         }
     }
 
+    @Override
     public void removeListener(CommandListener listener) {
         listeners.remove(listener);
     }

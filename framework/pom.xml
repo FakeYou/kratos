@@ -21,12 +21,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.kratos</groupId>
-            <artifactId>tictactoe</artifactId>
-            <version>0.1</version>
-        </dependency>
-
-        <dependency>
             <groupId>commons-net</groupId>
             <artifactId>commons-net</artifactId>
             <version>3.3</version>

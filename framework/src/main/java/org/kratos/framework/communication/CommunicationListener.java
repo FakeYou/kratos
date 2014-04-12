@@ -16,4 +16,5 @@ public interface CommunicationListener {
     public Boolean isListening();
 
     public void addListener(CommandListener listener);
+    public void removeListener(CommandListener listener);
 }

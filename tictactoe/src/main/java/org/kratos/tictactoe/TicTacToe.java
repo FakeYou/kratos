@@ -1,96 +1,73 @@
 package org.kratos.tictactoe;
 
-import org.kratos.framework.GUI.GameView;
 import org.kratos.framework.Kratos;
+import org.kratos.framework.communication.CommandListener;
+import org.kratos.framework.communication.Communication;
+import org.kratos.framework.communication.Interpreter;
+import org.kratos.framework.communication.Parser;
 import org.kratos.framework.game.Match;
 import org.kratos.framework.game.Player;
 import org.kratos.framework.game.events.Move;
 
-import java.util.ArrayList;
-
 /**
- * Created by FakeYou on 10-4-14.
+ * Created by FakeYou on 4/12/14.
  */
-public class TicTacToe{
+public class TicTacToe {
     private Kratos kratos;
+    private Interpreter interpreter;
+    private Parser parser;
+    private Match match;
+
     private Player player;
     private Player opponent;
-    private Match match;
-    private GameView view;
-    private ArrayList<Move> moves = new ArrayList<Move>();
-    private int amountOfExecutedMoves = 0;
 
-    public TicTacToe(Kratos kratos){
+    private Board board;
+
+    public TicTacToe(Kratos kratos) {
         this.kratos = kratos;
+        this.interpreter = kratos.getInterpreter();
+        this.parser = kratos.getParser();
+
         this.match = kratos.getMatch();
         this.player = match.getPlayer();
         this.opponent = match.getOpponent();
-        System.out.println("Starting view");
 
-        String opponentName = opponent == null ? "Opponent" : opponent.getUsername();
-        this.view = new GameView(GameView.TIC_TAC_TOE, player.getUsername(), opponentName, match, this);
+        this.board = new Board(kratos);
+        board.clear();
 
-        new Thread(new detectChanges()).start();
+        registerGameListener();
     }
 
-    public void incrementAmountOfExecutedMoves(){
-        amountOfExecutedMoves++;
-    }
+    public void registerGameListener() {
+        kratos.getCommunication().getCommunicationListener("game").addListener(new CommandListener() {
+            @Override
+            public void trigger(Communication.status status, String response) {
+                if(status == Communication.status.GAME_MOVE) {
+                    Move move = parser.parseMove(response);
 
-    private class detectChanges implements Runnable{
-        public void run(){
-            while(true){
-                moves = match.getMoves();
+                    String[] coords = move.getMove().split(",");
+                    int x = Integer.parseInt(coords[0]);
+                    int y = Integer.parseInt(coords[1]);
 
-                // See if we can update opponent's name.
-                if(view.getPlayerTwoName() == "Opponent" && match.getOpponent() != null){
-                    opponent = match.getOpponent();
-                    view.setPlayerTwoName(opponent.getUsername());
-                }
-
-                // Check if there has been a new move
-                if(amountOfExecutedMoves < moves.size()){
-                    // If so, forward the new move to the gameview and increment amountOfExecutedMoves.
-                    Move move = moves.get(amountOfExecutedMoves);
-                    amountOfExecutedMoves++;
-
-                    int playerInt = move.getPlayer() == opponent.getUsername() ? 2 : 1;
-                    String[] coordinates = move.getMove().split(",");
-                    view.makeMove(Integer.parseInt(coordinates[0]), Integer.parseInt(coordinates[1]), playerInt);
-                }
-
-                // Check if the game has ended in either a win, a loss or a draw.
-                Match.States matchState = match.getState();
-                if(matchState == Match.States.WIN){
-                    view.endGame(0);
-                }
-                else if(matchState == Match.States.LOSS) {
-                    view.endGame(1);
-                }
-                else if(matchState == Match.States.DRAW){
-                    view.endGame(2);
-                }
-
-                // Ensure we can't make a move when it's the opponent's turn.
-                if(matchState == Match.States.OPPONENT_TURN){
-                    if(view.ableToMakeMove() == true){
-                        view.setTurn(2);
+                    if(move.getPlayer().equals(player.getUsername())) {
+                        board.setSquare(x, y, board.getPlayerSquare());
+                    }
+                    else {
+                        board.setSquare(x, y, board.getOpponentSquare());
                     }
                 }
-
-                // Ensure we can make a move when it's our turn.
-                if(matchState == Match.States.PLAYER_TURN){
-                    if(view.ableToMakeMove() == false){
-                        view.setTurn(1);
-                    }
-                }
-
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException e)
-                {
+                else if(status == Communication.status.GAME_YOUR_TURN) {
                 }
             }
-        }
+        });
+    }
+
+    public void doMove(int x, int y) {
+        // todo - check if move is valid
+        interpreter.move(x + "," + y, null);
+    }
+
+    public Board getBoard() {
+        return board;
     }
 }

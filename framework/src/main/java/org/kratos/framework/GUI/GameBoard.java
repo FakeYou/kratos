@@ -1,4 +1,4 @@
-package org.kratos.framework.GUI;
+package org.kratos.framework.gui;
 
 import javax.swing.*;
 import java.awt.*;
@@ -6,160 +6,85 @@ import java.awt.*;
 /**
  * Created by Yuri on 2/4/2014.
  */
-public class GameBoard extends JPanel{
-    int rows;
-    int columns;
-    int squareSize;
-    GameBoardMouseListener listener;
-    int[][] gameState;
-    GameView view;
+public abstract class GameBoard extends JPanel {
+    private int rows;
+    private int columns;
+    private int squareWidth;
+    private int squareHeight;
 
-    /**
-     * Constructor to initialize a new game board
-     * @param rows          The amount of rows desired for the new board
-     * @param columns       The amount of columns desired for the new board
-     * @param squareSize    The size of each square (should be smaller if there's a lot of rows)
-     */
-    public GameBoard(int rows, int columns, int squareSize, GameView view){
-        this.setPreferredSize(new Dimension(rows * squareSize, columns * squareSize));
+    private GameBoardMouseListener listener;
+
+    public GameBoard(int columns, int rows){
+        this.setPreferredSize(new Dimension(500, 500));
 
         this.listener = new GameBoardMouseListener(this);
         this.rows = rows;
         this.columns = columns;
-        gameState = new int[rows][columns];
-        this.squareSize = squareSize;
-        this.view = view;
+        this.squareWidth = getPreferredSize().width / columns;
+        this.squareHeight = getPreferredSize().height / rows;
 
         this.addMouseListener(this.listener);
     }
 
-    /**
-     * Register a move into the variable (does not perform any painting operations yet) ONLY GETS CALLED FROM GUI
-     * @param x x of the move
-     * @param y y of the move
-     * @param player Player that made the move
-     */
-    public void registerMove(int x, int y, int player){
-        int[] rowcol = findRowCol(x, y);
-        int row = rowcol[0];
-        int col = rowcol[1];
-
-        System.out.println("Row: " + row + " Column: " + col);
-
-        if(this.gameState[row][col] != 0){
-            System.out.println("Move already made on this square");
-            return;
-        }
-        registerMoveColRow(col, row, player);
-        view.sendMove(col, row);
-    }
-
-    public void registerMoveColRow(int col, int row, int player){
-        this.gameState[row][col] = player;
-        paintAllMoves(this.getGraphics());
-    }
+    public abstract void click(int column, int row);
+    public abstract void paintSquare(int column, int row);
+    public abstract void paint();
 
     @Override
     protected void paintComponent(Graphics g){
         drawGrid(g);
         drawBoardBorder(g);
-        paintAllMoves(g);
     }
 
-    /**
-     * Draws the grid on the gameboard.
-     * @param g Graphics of the JPanel
-     */
+    public void paintSquares() {
+        for(int row = 0; row < rows; row++) {
+            for(int column = 0; column < columns; column++) {
+                paintSquare(column, row);
+            }
+        }
+    }
+
     private void drawGrid(Graphics g){
-        Graphics2D g2d = (Graphics2D)g;
-        System.out.println("Drawing grid");
+        g.setColor(Color.LIGHT_GRAY);
 
         // Draw vertical lines
         for(int i = 0; i < rows; i++) {
-            g2d.setColor(Color.BLACK);
-            g2d.drawLine(i * this.getWidth() / rows, 0, i * this.getWidth() / rows, this.getHeight());
+            g.drawLine(i * this.getWidth() / rows, 0, i * this.getWidth() / rows, this.getHeight());
         }
 
         // Draw horizontal lines
         for(int i = 0; i < columns; i++){
-            g2d.setColor(Color.BLACK);
-            g2d.drawLine(0, i * this.getHeight() / columns, this.getWidth(), i * this.getHeight() / columns);
+            g.drawLine(0, i * this.getHeight() / columns, this.getWidth(), i * this.getHeight() / columns);
         }
     }
 
-    /**
-     * Draws a (red) border around the grid
-     * @param g Graphics of the JPanel
-     */
     private void drawBoardBorder(Graphics g){
         // Border around the panel
-        g.setColor(Color.RED);
+        g.setColor(Color.LIGHT_GRAY);
 
-        // top left to top right
-        g.drawLine(0, 0, this.getWidth(), 0);
-
-        // top left to bottom left
-        g.drawLine(0, 0, 0, this.getHeight());
-
-        // bottom right to top right
-        g.drawLine(this.getWidth() - 1, this.getHeight(), this.getWidth() - 1, 0);
-
-        // bottom right to bottom left
-        g.drawLine(this.getWidth(), this.getHeight() - 1, 0, this.getHeight() - 1);
+        g.drawLine(0, 0, this.getWidth(), 0); // top left to top right
+        g.drawLine(0, 0, 0, this.getHeight()); // top left to bottom left
+        g.drawLine(this.getWidth() - 1, this.getHeight(), this.getWidth() - 1, 0); // bottom right to top right
+        g.drawLine(this.getWidth(), this.getHeight() - 1, 0, this.getHeight() - 1); // bottom right to bottom left
     }
 
-    /**
-     * Paint all moves saved in gameState[][]
-     * @param g
-     */
-    private void paintAllMoves(Graphics g){
-        // Loop through rows and columns
-        for(int row = 0; row < gameState.length; row++){
-            columnloop:
-            for(int column = 0; column < gameState[0].length; column++){
-                switch(gameState[row][column]){
-                    case 0:
-                        continue columnloop;
-                    case 1:
-                        g.setColor(Color.black);
-                        break;
-                    case 2:
-                        g.setColor(Color.WHITE);
-                        break;
-                }
+    public int[] findRowCol(int x, int y){
+        int[] coords = new int[2];
 
-                g.fillOval(column * squareSize + 3, row * squareSize + 3, squareSize - 6, squareSize - 6);
+        double width = getWidth();
+        double height = getHeight();
 
-                g.setColor(Color.black);
-                g.drawOval(column * squareSize + 3, row * squareSize + 3, squareSize - 6, squareSize - 6);
-            }
-        }
+        coords[0] = (int) Math.floor((double) x / width * columns);
+        coords[1] = (int) Math.floor((double) y / height * rows);
+
+        return coords;
     }
 
-    /**
-     * Deduce the row and column position of the clicked x, y positions (from mouselistener)
-     * @param x
-     * @param y
-     * @return int[row, column]
-     */
-    private int[] findRowCol(int x, int y){
-        int tempx = 0;
-        int tempy = 0;
+    public int getSquareWidth() {
+        return squareWidth;
+    }
 
-        for(int i = squareSize; i <= this.getWidth(); i = i+squareSize){
-            if(x < i){
-                break;
-            }
-            tempx++;
-        }
-
-        for(int i = squareSize; i <= this.getHeight(); i = i+squareSize){
-            if(y < i){
-                break;
-            }
-            tempy++;
-        }
-
-        return new int[] {tempy, tempx};
+    public int getSquareHeight() {
+        return squareHeight;
     }
 }

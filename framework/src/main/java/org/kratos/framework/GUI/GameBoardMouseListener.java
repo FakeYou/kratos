@@ -1,4 +1,4 @@
-package org.kratos.framework.GUI;
+package org.kratos.framework.gui;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -21,23 +21,18 @@ public class GameBoardMouseListener implements MouseListener {
 
     }
     public void mouseReleased(MouseEvent e){
+        int x = e.getX();
+        int y = e.getY();
 
+        int[] coords = gameBoard.findRowCol(x, y);
+
+        gameBoard.click(coords[0], coords[1]);
     }
     public void mousePressed(MouseEvent e){
 
     }
 
     public void mouseClicked(MouseEvent e){
-        int x = e.getX();
-        int y = e.getY();
 
-        if(gameBoard.view.ableToMakeMove()){
-            gameBoard.registerMove(x, y, 2);
-            System.out.println("X: " + x + " Y: " + y);
-        } else {
-            System.out.println("It's not your turn!");
-        }
     }
-
-
 }

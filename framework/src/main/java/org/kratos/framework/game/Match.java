@@ -35,12 +35,16 @@ public class Match {
     private Player player;
     private Player opponent;
     private States state;
+    private String gametype;
+
+    private Player playerToStart;
+    private Player playerToMove;
 
     private ArrayList<Move> moves;
 
     private AbstractGameModule gameModule;
 
-    public Match(Kratos kratos, Player player) {
+    public Match(Kratos kratos, final Player player) {
         this.kratos = kratos;
         this.parser = kratos.getParser();
         this.interpreter = kratos.getInterpreter();
@@ -58,6 +62,7 @@ public class Match {
                     org.kratos.framework.game.events.Match match = parser.parseMatch(response);
 
                     opponent = new Player(match.getOpponent(), true);
+                    gametype = match.getGametype();
                     start(match.getGametype(), match.getPlayerToMove());
                 }
                 else if(status == Communication.status.GAME_MOVE) {
@@ -79,6 +84,7 @@ public class Match {
                     System.out.println("###### DRAW ######");
                 }
                 else if(status == Communication.status.GAME_YOUR_TURN) {
+                    playerToMove = player;
                     state = States.PLAYER_TURN;
                 }
             }
@@ -98,10 +104,14 @@ public class Match {
         if(playerToMove.equals(player.getUsername())) {
             startingPlayername = player.getUsername();
             secondPlayername = opponent.getUsername();
+
+            playerToStart = player;
         }
         else {
             startingPlayername = opponent.getUsername();
             secondPlayername = player.getUsername();
+
+            playerToStart = opponent;
         }
 
         if(gametype.equals("Guess Game")) {
@@ -126,6 +136,8 @@ public class Match {
         if(state == States.PLAYER_TURN) {
             interpreter.move(move, null);
             state = States.OPPONENT_TURN;
+
+            playerToMove = opponent;
         }
     }
 
@@ -139,5 +151,17 @@ public class Match {
 
     public Player getOpponent() {
         return opponent;
+    }
+
+    public Player getPlayerToStart() {
+        return playerToStart;
+    }
+
+    public Player getPlayerToMove() {
+        return playerToMove;
+    }
+
+    public String getGametype() {
+        return gametype;
     }
 }
