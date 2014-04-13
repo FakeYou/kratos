@@ -87,7 +87,7 @@ public class View {
                 else if (status == Communication.status.GAME_WIN) {
                     JOptionPane.showMessageDialog(frame, "congratulations, you have won", "Tic Tac Toe - Kratos", JOptionPane.INFORMATION_MESSAGE);
                 }
-                else if (status == Communication.status.GAME_LOSS) {
+                else if (status == Communication.status.GAME_DRAW) {
                     JOptionPane.showMessageDialog(frame, "It's a draw", "Tic Tac Toe - Kratos", JOptionPane.INFORMATION_MESSAGE);
                 }
             }

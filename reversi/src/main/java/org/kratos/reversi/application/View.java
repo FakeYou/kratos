@@ -38,6 +38,8 @@ public class View {
     private JLabel playerScoreLabel;
     private JLabel opponentScoreLabel;
 
+    private Thread graphicsThread;
+
     public View(Kratos kratos, Reversi reversi){
         this.kratos = kratos;
         this.reversi = reversi;
@@ -56,9 +58,9 @@ public class View {
             }
         });
 
-        new Thread() {
+        graphicsThread = new Thread() {
             public void run() {
-                while(match.getState() == Match.States.PLAYER_TURN || match.getState() == Match.States.OPPONENT_TURN) {
+                while(true) {
                     refresh();
 
                     try {
@@ -67,13 +69,16 @@ public class View {
                     catch (InterruptedException e) {}
                 }
             }
-        }.start();
+        };
+
+        graphicsThread.start();
 
         registerGameListener();
     }
 
     public void unregisterGameListener() {
         kratos.getCommunication().getCommunicationListener("game").removeListener(gameListener);
+        graphicsThread.stop();
     }
 
     public void registerGameListener() {
@@ -100,7 +105,7 @@ public class View {
                 else if (status == Communication.status.GAME_WIN) {
                     JOptionPane.showMessageDialog(frame, "congratulations, you have won", "Reversi - Kratos", JOptionPane.INFORMATION_MESSAGE);
                 }
-                else if (status == Communication.status.GAME_LOSS) {
+                else if (status == Communication.status.GAME_DRAW) {
                     JOptionPane.showMessageDialog(frame, "It's a draw", "Reversi - Kratos", JOptionPane.INFORMATION_MESSAGE);
                 }
             }

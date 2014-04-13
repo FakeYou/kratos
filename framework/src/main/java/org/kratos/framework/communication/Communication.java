@@ -143,7 +143,7 @@ public class Communication implements Runnable {
     }
 
     public void connect(String host, int port) {
-        this.host = host;
+        this.host = host.trim();
         this.port = port;
 
         try {

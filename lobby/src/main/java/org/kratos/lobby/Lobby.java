@@ -80,8 +80,8 @@ public class Lobby {
                         new TicTacToeApp(kratos, app.getLobbyFrame());
                     } else if (gametype.equals("Reversi")){
                         new ReversiApp(kratos, app.getLobbyFrame());
-                    } else if (gametype.equals("GuessGame")){
-                        new GuessGame(kratos).setVisible(true);
+                    } else {
+                        JOptionPane.showMessageDialog(app.getLobbyFrame(), "Sorry, this game is not supported yet", "Kratos", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
