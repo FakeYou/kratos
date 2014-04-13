@@ -84,6 +84,20 @@ public class Board {
         listeners.remove(listener);
     }
 
+    public int getScore(Square square) {
+        int score = 0;
+
+        for(int y = 0; y < board.length; y++) {
+            for(int x = 0; x < board[y].length; x++) {
+                if(board[y][x] == square) {
+                    score += 1;
+                }
+            }
+        }
+
+        return score;
+    }
+
     public void debug() {
         System.out.println("---------");
 

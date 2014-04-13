@@ -34,15 +34,13 @@ public class ReversiApp {
                 reversi.unregisterGameListener();
             }
 
-            @Override
-            public void windowOpened(WindowEvent e) {
-                view.refresh();
-            }
-
+            public void windowOpened(WindowEvent e) {}
             public void windowClosed(WindowEvent e) {}
             public void windowIconified(WindowEvent e) {}
             public void windowDeiconified(WindowEvent e) {}
-            public void windowActivated(WindowEvent e) {}
+            public void windowActivated(WindowEvent e) {
+                view.refresh();
+            }
             public void windowDeactivated(WindowEvent e) {}
         });
     }

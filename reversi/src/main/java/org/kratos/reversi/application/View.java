@@ -56,12 +56,24 @@ public class View {
             }
         });
 
+        new Thread() {
+            public void run() {
+                while(match.getState() == Match.States.PLAYER_TURN || match.getState() == Match.States.OPPONENT_TURN) {
+                    refresh();
+
+                    try {
+                        Thread.sleep(250);
+                    }
+                    catch (InterruptedException e) {}
+                }
+            }
+        }.start();
+
         registerGameListener();
     }
 
     public void unregisterGameListener() {
         kratos.getCommunication().getCommunicationListener("game").removeListener(gameListener);
-        reversi.getBoard().removeListener(boardListener);
     }
 
     public void registerGameListener() {
@@ -94,15 +106,7 @@ public class View {
             }
         };
 
-        boardListener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                refresh();
-            }
-        };
-
         kratos.getCommunication().getCommunicationListener("game").addListener(gameListener);
-        reversi.getBoard().addListener(boardListener);
     }
 
     public JPanel getPanel() {
@@ -113,6 +117,11 @@ public class View {
         GameBoard board = (GameBoard) gameBoard;
         board.paintSquares();
         board.paint();
+
+        if(playerScoreLabel != null && opponentScoreLabel != null) {
+            playerScoreLabel.setText(reversi.getBoard().getScore(reversi.getBoard().getPlayerSquare()) + "");
+            opponentScoreLabel.setText(reversi.getBoard().getScore(reversi.getBoard().getOpponentSquare()) + "");
+        }
     }
 
     private void createUIComponents() {
@@ -131,6 +140,11 @@ public class View {
             @Override
             public void paintSquare(int column, int row) {
                 Graphics2D g = (Graphics2D) getGraphics();
+
+                if(g == null) {
+                    return;
+                }
+
                 Board.Square square = reversi.getBoard().getSquare(column, row);
 
                 Point topLeft = new Point(column * getSquareHeight() + 5, row * getSquareWidth() + 5);
@@ -159,6 +173,9 @@ public class View {
 
             }
         };
+
+        gameBoard.setVisible(true);
+        refresh();
     }
 
 }
