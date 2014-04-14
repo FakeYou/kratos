@@ -25,7 +25,7 @@ public class View {
     private TicTacToe ticTacToe;
 
     private CommandListener gameListener;
-    private ActionListener boardListener;
+    private Thread graphicsThread;
 
     private JButton forfeitButton;
     private JLabel gameLabel;
@@ -55,12 +55,26 @@ public class View {
             }
         });
 
+        graphicsThread = new Thread() {
+            public void run() {
+                while(true) {
+                    refresh();
+
+                    try {
+                        Thread.sleep(250);
+                    }
+                    catch (InterruptedException e) {}
+                }
+            }
+        };
+
+        graphicsThread.start();
         registerGameListener();
     }
 
     public void unregisterGameListener() {
         kratos.getCommunication().getCommunicationListener("game").removeListener(gameListener);
-        ticTacToe.getBoard().removeListener(boardListener);
+        graphicsThread.stop();
     }
 
     public void registerGameListener() {
@@ -93,16 +107,7 @@ public class View {
             }
         };
 
-        boardListener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                refresh();
-            }
-        };
-
         kratos.getCommunication().getCommunicationListener("game").addListener(gameListener);
-        ticTacToe.getBoard().addListener(boardListener);
-
     }
 
     public JPanel getPanel() {
@@ -131,6 +136,11 @@ public class View {
             @Override
             public void paintSquare(int column, int row) {
                 Graphics2D g = (Graphics2D) getGraphics();
+
+                if(g == null) {
+                    return;
+                }
+
                 Board.Square square = ticTacToe.getBoard().getSquare(column, row);
 
                 Point topLeft = new Point(column * getSquareHeight() + 30, row * getSquareWidth() + 30);
@@ -159,6 +169,11 @@ public class View {
             @Override
             public void paint() {
                 Graphics2D g = (Graphics2D) getGraphics();
+
+                if(g == null) {
+                    return;
+                }
+
                 g.setStroke(new BasicStroke(4));
                 g.setColor(Color.RED);
                 Board board = ticTacToe.getBoard();

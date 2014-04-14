@@ -8,7 +8,9 @@ import org.kratos.framework.communication.Parser;
 import org.kratos.framework.game.events.Challenge;
 import org.kratos.framework.game.events.Match;
 import org.kratos.guess.GuessGame;
+import org.kratos.reversi.ai.ReversiAI;
 import org.kratos.reversi.application.ReversiApp;
+import org.kratos.tictactoe.ai.TicTacToeAI;
 import org.kratos.tictactoe.application.TicTacToeApp;
 
 import javax.swing.*;
@@ -53,17 +55,23 @@ public class Lobby {
             public void trigger(Communication.status status, String response) {
                 Challenge challenge = parser.parseChallengeRequest(response);
 
-                String message = "You have been challenged by " + challenge.getChallenger() + " to play " + challenge.getGame() + ".\n\r" +
-                        "Do you wish to accept the challenge?";
-
-                int answer = JOptionPane.showConfirmDialog(app.getLobbyFrame(), message, "Challenge - kratos", JOptionPane.YES_NO_OPTION);
-
-                if(answer == JOptionPane.YES_OPTION) {
+                if(challenge.getChallenger().matches("^(Bot ).+")) {
                     challenge.setAccepted(true);
                     interpreter.challengeAccept(challenge.getNumber(), null);
                 }
                 else {
-                    challenge.setAccepted(false);
+                    String message = "You have been challenged by " + challenge.getChallenger() + " to play " + challenge.getGame() + ".\n\r" +
+                            "Do you wish to accept the challenge?";
+
+                    int answer = JOptionPane.showConfirmDialog(app.getLobbyFrame(), message, "Challenge - kratos", JOptionPane.YES_NO_OPTION);
+
+                    if(answer == JOptionPane.YES_OPTION) {
+                        challenge.setAccepted(true);
+                        interpreter.challengeAccept(challenge.getNumber(), null);
+                    }
+                    else {
+                        challenge.setAccepted(false);
+                    }
                 }
             }
         });
@@ -100,6 +108,31 @@ public class Lobby {
                 interpreter.subscribe(app.getSelectedGame(), subscribeListener());
                 statusLabel.setText("Finding opponent");
                 statusLabel.validate();
+            }
+        });
+
+        singleplayerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(app.getSelectedGame().equals("Tic Tac Toe")) {
+                    TicTacToeAI ticTacToeAI = new TicTacToeAI();
+                    ticTacToeAI.setRandomUsername();
+                    ticTacToeAI.setHost(kratos.getCommunication().getHost());
+                    ticTacToeAI.setPort(kratos.getCommunication().getPort());
+                    ticTacToeAI.setChallenger(kratos.getPlayer().getUsername());
+                    ticTacToeAI.start();
+                }
+                else if(app.getSelectedGame().equals("Reversi")) {
+                    ReversiAI reversiAI = new ReversiAI();
+                    reversiAI.setRandomUsername();
+                    reversiAI.setHost(kratos.getCommunication().getHost());
+                    reversiAI.setPort(kratos.getCommunication().getPort());
+                    reversiAI.setChallenger(kratos.getPlayer().getUsername());
+                    reversiAI.start();
+                }
+                else {
+                    JOptionPane.showMessageDialog(app.getLobbyFrame(), "Sorry, this game is not supported yet", "Kratos", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 

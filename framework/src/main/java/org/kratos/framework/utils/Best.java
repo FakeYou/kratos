@@ -1,4 +1,4 @@
-package org.kratos.ai;
+package org.kratos.framework.utils;
 
 /**
  * Created by FakeYou on 4/11/14.
@@ -18,4 +18,7 @@ public class Best {
         this.y = y;
     }
 
+    public String toString() {
+        return "value: " + value + ", x: " + x + ", y: " + y;
+    }
 }

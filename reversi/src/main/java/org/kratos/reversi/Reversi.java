@@ -83,9 +83,11 @@ public class Reversi {
         // todo - flip tiles
 
         if(board.getSquare(x, y) != Board.Square.EMPTY) {
+            System.out.println("[Reversi/doMove] error: not empty");
             return false;
         }
         else if(!isLegalMove(x, y)) {
+            System.out.println("[Reversi/doMove] error: not legal");
             return false;
         }
         else {
@@ -94,11 +96,25 @@ public class Reversi {
         }
     }
 
-    private Boolean isLegalMove(int x, int y) {
-        return getChains(x, y, board.getPlayerSquare(), board.getOpponentSquare()).size() >= 1;
+    public Boolean isLegalMove(int x, int y) {
+        return isLegalMove(x, y, board.getPlayerSquare());
+    }
+
+
+    public Boolean isLegalMove(int x, int y, Board.Square square) {
+        if(square == board.getPlayerSquare()) {
+            return getChains(x, y, board.getPlayerSquare(), board.getOpponentSquare()).size() >= 1;
+        }
+        else {
+            return getChains(x, y, board.getOpponentSquare(), board.getPlayerSquare()).size() >= 1;
+        }
     }
 
     public void flipTiles(int x, int y, Board.Square square) {
+        flipTiles(x, y, square, board);
+    }
+
+    public void flipTiles(int x, int y, Board.Square square, Board board) {
         Stack<Stack<int[]>> chains;
 
         if(square == board.getPlayerSquare()) {
@@ -153,5 +169,9 @@ public class Reversi {
 
     public Board getBoard() {
         return board;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
     }
 }

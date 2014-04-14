@@ -45,6 +45,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.github.jankroken</groupId>
+            <artifactId>commandline</artifactId>
+            <version>1.7.0</version>
+        </dependency>
+
+        <dependency>
             <groupId>nl.hanze.t23i.gamemodule</groupId>
             <artifactId>extern</artifactId>
             <version>1.0</version>

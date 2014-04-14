@@ -180,4 +180,12 @@ public class Communication implements Runnable {
     public CommunicationHandler getHandler() {
         return handler;
     }
+
+    public String getHost() {
+        return host;
+    }
+
+    public int getPort() {
+        return port;
+    }
 }

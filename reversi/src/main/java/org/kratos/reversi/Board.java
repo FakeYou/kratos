@@ -70,6 +70,40 @@ public class Board {
         return opponentSquare;
     }
 
+    public int getWidth() {
+        return board[0].length;
+    }
+
+    public int getHeight() {
+        return board.length;
+    }
+
+    public Boolean IsFull() {
+        for(int y = 0; y < getHeight(); y++) {
+            for(int x = 0; x < getWidth(); x++) {
+
+                if(getSquare(x, y) == Board.Square.EMPTY) {
+                    return false;
+                }
+
+            }
+        }
+
+        return true;
+    }
+
+    public Board clone() {
+        Board clone = new Board(kratos);
+
+        for(int y = 0; y < clone.board.length; y++) {
+            for(int x = 0; x < clone.board[y].length; x++) {
+                clone.board[y][x] = board[y][x];
+            }
+        }
+
+        return clone;
+    }
+
     public void notifyListeners() {
         for(ActionListener listener : listeners) {
             listener.actionPerformed(null);

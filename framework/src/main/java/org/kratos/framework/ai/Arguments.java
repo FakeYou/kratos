@@ -1,4 +1,4 @@
-package org.kratos.ai.utils;
+package org.kratos.framework.ai;
 
 import com.github.jankroken.commandline.annotations.LongSwitch;
 import com.github.jankroken.commandline.annotations.Option;
@@ -12,6 +12,7 @@ public class Arguments {
     private String host;
     private String username;
     private String gametype;
+    private String challenger;
     private Integer port;
 
     @Option
@@ -20,8 +21,6 @@ public class Arguments {
     @SingleArgument
     public void setHost(String host) {
         this.host = host;
-
-        System.out.println("setHost: " + host);
     }
 
     @Option
@@ -30,8 +29,6 @@ public class Arguments {
     @SingleArgument
     public void setPort(String port) {
         this.port = Integer.parseInt(port);
-
-        System.out.println("setPort: " + port);
     }
 
     @Option
@@ -40,8 +37,6 @@ public class Arguments {
     @SingleArgument
     public void setUsername(String username) {
         this.username = username;
-
-        System.out.println("setUsername: " + username);
     }
 
     @Option
@@ -50,8 +45,14 @@ public class Arguments {
     @SingleArgument
     public void setGametype(String gametype) {
         this.gametype = gametype;
+    }
 
-        System.out.println("setGametype: " + gametype);
+    @Option
+    @LongSwitch("challenger")
+    @ShortSwitch("c")
+    @SingleArgument
+    public void setChallenger(String challenger) {
+        this.challenger = challenger;
     }
 
     public String getHost() {
@@ -68,5 +69,9 @@ public class Arguments {
 
     public String getGametype() {
         return gametype;
+    }
+
+    public String getChallenger() {
+        return challenger;
     }
 }
