@@ -102,6 +102,16 @@ public class AI {
         return arguments.getChallenger();
     }
 
+    public Integer getDepth() {
+        Integer depth = arguments.getDepth();
+
+        if(depth != null) {
+            return depth;
+        }
+
+        return 3;
+    }
+
     public void setUsername(String username) {
         this.username = username;
     }

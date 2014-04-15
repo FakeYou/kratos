@@ -102,7 +102,7 @@ public class Reversi {
 
 
     public Boolean isLegalMove(int x, int y, Board.Square square) {
-        if(square == board.getPlayerSquare()) {
+        if(square.equals(board.getPlayerSquare())) {
             return getChains(x, y, board.getPlayerSquare(), board.getOpponentSquare()).size() >= 1;
         }
         else {

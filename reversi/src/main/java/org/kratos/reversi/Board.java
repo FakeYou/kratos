@@ -101,7 +101,17 @@ public class Board {
             }
         }
 
+        clone.opponentSquare = getOpponentSquare();
+        clone.playerSquare = getPlayerSquare();
+
         return clone;
+    }
+
+    public void switchSquares() {
+        Square tempSquare = playerSquare;
+
+        playerSquare = opponentSquare;
+        opponentSquare = tempSquare;
     }
 
     public void notifyListeners() {
@@ -140,10 +150,10 @@ public class Board {
                 char c = ' ';
 
                 if(board[y][x] == Square.BLACK) {
-                    c = 'B';
+                    c = '@';
                 }
                 else if(board[y][x] == Square.WHITE) {
-                    c = 'W';
+                    c = '.';
                 }
 
                 System.out.print(c);

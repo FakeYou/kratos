@@ -65,9 +65,13 @@ public class ReversiAI extends AI {
             public void trigger(Communication.status status, String response) {
                 if(status == Communication.status.GAME_MATCH) {
                     System.out.println("[ReversiAI/start] match found");
+
+                    reversi = new Reversi(kratos);
                 }
                 else if(status == Communication.status.GAME_MOVE) {
                     System.out.println("[ReversiAI/start] move made");
+
+                    reversi.getBoard().debug();
                 }
                 else if(status == Communication.status.GAME_YOUR_TURN) {
                     System.out.println("[ReversiAI/start] my turn");
@@ -79,24 +83,33 @@ public class ReversiAI extends AI {
                 }
                 else if(status == Communication.status.GAME_LOSS) {
                     System.out.println("[ReversiAI/start] lost");
-                    unregisterGameListener();
-                    kratos.getInterpreter().logout(null);
-                    kratos.getInterpreter().disconnect();
-                    kratos.getCommunication().disconnect();
+
+                    if(getChallenger() != null) {
+                        unregisterGameListener();
+                        kratos.getInterpreter().logout(null);
+                        kratos.getInterpreter().disconnect();
+                        kratos.getCommunication().disconnect();
+                    }
                 }
                 else if(status == Communication.status.GAME_WIN) {
                     System.out.println("[ReversiAI/start] won");
-                    unregisterGameListener();
-                    kratos.getInterpreter().logout(null);
-                    kratos.getInterpreter().disconnect();
-                    kratos.getCommunication().disconnect();
+
+                    if(getChallenger() != null) {
+                        unregisterGameListener();
+                        kratos.getInterpreter().logout(null);
+                        kratos.getInterpreter().disconnect();
+                        kratos.getCommunication().disconnect();
+                    }
                 }
                 else if(status == Communication.status.GAME_DRAW) {
                     System.out.println("[ReversiAI/start] draw");
-                    unregisterGameListener();
-                    kratos.getInterpreter().logout(null);
-                    kratos.getInterpreter().disconnect();
-                    kratos.getCommunication().disconnect();
+
+                    if(getChallenger() != null) {
+                        unregisterGameListener();
+                        kratos.getInterpreter().logout(null);
+                        kratos.getInterpreter().disconnect();
+                        kratos.getCommunication().disconnect();
+                    }
                 }
             }
         };
@@ -109,8 +122,6 @@ public class ReversiAI extends AI {
                 if(challenge.getGame().equals("Reversi")) {
                     System.out.println("[ReversiAI/start] accepting challenge from: " + challenge.getChallenger());
 
-                    reversi = new Reversi(kratos);
-
                     kratos.getInterpreter().challengeAccept(challenge.getNumber(), null);
                 }
             }
@@ -120,8 +131,8 @@ public class ReversiAI extends AI {
         kratos.getCommunication().getCommunicationListener("challengeRequest").addListener(challengeListener);
     }
 
-    public Best getBestMove(Board.Square player) {
-        return getBestMove(player, reversi.getBoard().clone(), 0);
+    public Best getBestMove(Board.Square square) {
+        return getBestMove(square, reversi.getBoard().clone(), 0);
     }
 
     public Best getBestMove(Board.Square square, Board board, int depth) {
@@ -137,18 +148,23 @@ public class ReversiAI extends AI {
             value = board.getScore(board.getPlayerSquare());
         }
 
-        if(depth >= 2) {
+        if(depth >= getDepth()) {
             return new Best(value);
         }
 
         for(int y = 0; y < board.getHeight(); y++) {
             for(int x = 0; x < board.getWidth(); x++) {
-                if(!reversi.isLegalMove(x, y, square) || board.getSquare(x, y) != Board.Square.EMPTY) {
-                    continue;
-                }
 
                 Board tempBoard = board.clone();
                 reversi.setBoard(tempBoard);
+
+                if(!reversi.isLegalMove(x, y, square) || board.getSquare(x, y) != Board.Square.EMPTY) {
+                    reversi.setBoard(board);
+                    continue;
+                }
+
+                best.x = x;
+                best.y = y;
 
                 if(square == reversi.getBoard().getPlayerSquare()) {
 
@@ -176,7 +192,7 @@ public class ReversiAI extends AI {
             }
         }
 
-        System.out.println("[ReversiAI/getBestMove] square: " + square + " depth: " + depth + ", " + best);
+//        System.out.println("[ReversiAI/getBestMove] square: " + square + " depth: " + depth + ", " + best);
         return best;
     }
 

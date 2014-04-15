@@ -14,6 +14,7 @@ public class Arguments {
     private String gametype;
     private String challenger;
     private Integer port;
+    private Integer depth;
 
     @Option
     @LongSwitch("host")
@@ -55,6 +56,12 @@ public class Arguments {
         this.challenger = challenger;
     }
 
+    @Option
+    @LongSwitch("depth")
+    @ShortSwitch("d")
+    @SingleArgument
+    public void setDepth(String depth) { this.depth = Integer.parseInt(depth); }
+
     public String getHost() {
         return host;
     }
@@ -74,4 +81,6 @@ public class Arguments {
     public String getChallenger() {
         return challenger;
     }
+
+    public Integer getDepth() { return depth; }
 }

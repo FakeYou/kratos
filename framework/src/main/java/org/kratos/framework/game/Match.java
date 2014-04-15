@@ -129,6 +129,7 @@ public class Match {
             gameModule = new Othello(startingPlayername, secondPlayername);
         }
 
+        System.out.println("[Game/Match] gamemodule started");
         gameModule.start();
     }
 
